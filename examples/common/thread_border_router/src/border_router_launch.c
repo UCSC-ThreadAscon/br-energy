@@ -6,6 +6,7 @@
  */
 
 #include "border_router_launch.h"
+#include "utilities.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -132,6 +133,9 @@ static void ot_task_worker(void *ctx)
     ESP_ERROR_CHECK(esp_openthread_auto_start((error == OT_ERROR_NONE) ? &dataset : NULL));
 #endif // CONFIG_OPENTHREAD_BR_AUTO_START
     esp_openthread_lock_release();
+
+    // TX power must be set before starting the OpenThread CLI.
+    setTxPower();
 
     // Run the main loop
     esp_openthread_cli_create_task();
