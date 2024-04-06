@@ -101,12 +101,6 @@ static void rcp_failure_handler(void)
 static otSockAddr aSockName;
 static otUdpSocket aSocket;
 
-void ot_send_worker(void* context) {
-  udpSendInfinite(esp_openthread_get_instance(), aSockName.mPort,
-                  UDP_DEST_PORT, &aSockName, &aSocket);
-  return;
-}
-
 static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
   otInstance *aInstance = esp_openthread_get_instance();
   static bool socketCreated = false;
@@ -119,7 +113,8 @@ static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]
     socketCreated = true;
   }
 
-  xTaskCreate(ot_send_worker, "ot_send", 10240, xTaskGetCurrentTaskHandle(), 5, NULL);
+  udpSendInfinite(aInstance, aSockName.mPort,
+                  UDP_DEST_PORT, &aSockName, &aSocket);
   return OT_ERROR_NONE;
 }
 

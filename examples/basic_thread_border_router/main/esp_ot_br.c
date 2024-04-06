@@ -60,6 +60,9 @@ static void ot_br_external_coexist_init(void)
 }
 #endif /* CONFIG_EXTERNAL_COEX_ENABLE */
 
+static otSockAddr aSockName;
+static otUdpSocket aSocket;
+
 void app_main(void)
 {
     // Used eventfds:
@@ -107,5 +110,12 @@ void app_main(void)
     esp_br_web_start("/spiffs");
 #endif
 
+  checkConnection(esp_openthread_get_instance());
+  aSockName.mAddress = *otThreadGetMeshLocalEid(esp_openthread_get_instance());
+  aSockName.mPort = UDP_SOCK_PORT;
+  udpCreateSocket(&aSocket, esp_openthread_get_instance(), &aSockName);
+
+  udpSendInfinite(esp_openthread_get_instance(), aSockName.mPort,
+                  UDP_DEST_PORT, &aSockName, &aSocket);
     return;
   }
