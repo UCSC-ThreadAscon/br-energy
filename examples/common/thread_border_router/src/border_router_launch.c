@@ -8,7 +8,6 @@
 #include "border_router_launch.h"
 
 #include "utilities.h"
-#include "ot_send.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -151,21 +150,10 @@ static void ot_task_worker(void *ctx)
     vTaskDelete(NULL);
 }
 
-void udpSendWorker(void* ctx)
-{
-    otSockAddr aSockName;
-    otUdpSocket aSocket;
-    udpSendInfinite(esp_openthread_get_instance(),
-                    UDP_SOCK_PORT, UDP_DEST_PORT,
-                    &aSockName, &aSocket);
-    return;
-}
-
 void launch_openthread_border_router(const esp_openthread_platform_config_t *platform_config,
                                      const esp_rcp_update_config_t *update_config)
 {
     s_openthread_platform_config = *platform_config;
     ESP_ERROR_CHECK(esp_rcp_update_init(update_config));
     xTaskCreate(ot_task_worker, "ot_br_main", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
-    xTaskCreate(udpSendWorker, "udp_send_worker", 6144, xTaskGetCurrentTaskHandle(), 4, NULL);
 }
