@@ -35,7 +35,7 @@
 
 #define DEFAULT_WAIT_TIME_MS MS_TO_TICKS(100)
 #define MAIN_WAIT_TIME MS_TO_TICKS(5000)
-#define PACKET_SEND_DELAY_MS 500
+#define PACKET_SEND_DELAY_MS 3000
 #define IDLE_DELAY_TICKS MS_TO_TICKS(500)
 
 #define OT_DISCONNECTED(role) (role == OT_DEVICE_ROLE_DISABLED) || (role == OT_DEVICE_ROLE_DETACHED)
@@ -56,6 +56,10 @@
  * https://docs.google.com/document/d/1o-NaEOA-vzWPCv7VX1dONUfwos2epveDk4H_Y2Y5g1Y/edit?usp=sharing
 */
 #define EmptyMemory(pointer, size) memset((void *) pointer, 0, size)
+
+void udpCreateSocket(otUdpSocket *aSocket,
+                      otInstance *aInstance,
+                      otSockAddr *aSockName);
 
 void udpSendInfinite(otInstance *aInstance,
                      uint16_t port,

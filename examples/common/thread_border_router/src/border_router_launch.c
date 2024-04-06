@@ -99,10 +99,21 @@ static void rcp_failure_handler(void)
 */
 
 static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
-  otSockAddr aSockName;
-  otUdpSocket aSocket;
-  udpSendInfinite(esp_openthread_get_instance(),
-                  UDP_SOCK_PORT, UDP_DEST_PORT,
+  otInstance *aInstance = esp_openthread_get_instance();
+
+  static bool socketCreated = false;
+  static otSockAddr aSockName;
+  static otUdpSocket aSocket;
+
+  if (!socketCreated) {
+    aSockName.mAddress = *otThreadGetMeshLocalEid(aInstance);
+    aSockName.mPort = UDP_SOCK_PORT;
+    udpCreateSocket(&aSocket, aInstance, &aSockName);
+
+    socketCreated = true;
+  }
+
+  udpSendInfinite(aInstance, aSockName.mPort, UDP_DEST_PORT,
                   &aSockName, &aSocket);
   return OT_ERROR_NONE;
 }
