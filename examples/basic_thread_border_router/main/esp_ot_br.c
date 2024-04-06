@@ -118,6 +118,10 @@ void app_main(void)
     esp_br_web_start("/spiffs");
 #endif
 
-    xTaskCreate(ot_send_worker, "ot_send_worker", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
+  otSockAddr aSockName;
+  otUdpSocket aSocket;
+  udpSendInfinite(esp_openthread_get_instance(),
+                  UDP_SOCK_PORT, UDP_DEST_PORT,
+                  &aSockName, &aSocket);
     return;
   }
