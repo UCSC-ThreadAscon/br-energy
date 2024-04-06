@@ -108,4 +108,11 @@ void app_main(void)
 #if CONFIG_OPENTHREAD_BR_START_WEB
     esp_br_web_start("/spiffs");
 #endif
-}
+
+    otSockAddr aSockName;
+    otUdpSocket aSocket;
+    udpSendInfinite(esp_openthread_get_instance(),
+                    UDP_SOCK_PORT, UDP_DEST_PORT,
+                    &aSockName, &aSocket);
+    return;
+  }
