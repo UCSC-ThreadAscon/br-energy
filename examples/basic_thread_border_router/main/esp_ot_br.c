@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ot_send.h"
-
 #include "esp_check.h"
 #include "esp_err.h"
 #include "esp_event.h"
@@ -109,10 +107,5 @@ void app_main(void)
     esp_br_web_start("/spiffs");
 #endif
 
-    otSockAddr aSockName;
-    otUdpSocket aSocket;
-    udpSendInfinite(esp_openthread_get_instance(),
-                    UDP_SOCK_PORT, UDP_DEST_PORT,
-                    &aSockName, &aSocket);
     return;
   }
