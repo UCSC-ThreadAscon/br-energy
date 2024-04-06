@@ -101,12 +101,17 @@ static void rcp_failure_handler(void)
  * https://github.com/openthread/openthread/blob/a5c17b77635bb43d02d4dec96fbf4b7eeb43be06/include/openthread/cli.h#L158
 */
 
-static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
+void ot_send_start() {
   otSockAddr aSockName;
   otUdpSocket aSocket;
   udpSendInfinite(esp_openthread_get_instance(),
                   UDP_SOCK_PORT, UDP_DEST_PORT,
                   &aSockName, &aSocket);
+  return;
+}
+
+static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
+  xTaskCreate(ot_send_start, "ot_send_infinite", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
   return OT_ERROR_NONE;
 }
 
