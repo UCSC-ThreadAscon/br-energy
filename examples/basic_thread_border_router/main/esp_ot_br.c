@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ot_send.h"
-
 #include "esp_check.h"
 #include "esp_err.h"
 #include "esp_event.h"
@@ -62,15 +60,6 @@ static void ot_br_external_coexist_init(void)
 }
 #endif /* CONFIG_EXTERNAL_COEX_ENABLE */
 
-void ot_send_worker(void* ctx) {
-  otSockAddr aSockName;
-  otUdpSocket aSocket;
-  udpSendInfinite(esp_openthread_get_instance(),
-                  UDP_SOCK_PORT, UDP_DEST_PORT,
-                  &aSockName, &aSocket);
-  return;
-}
-
 void app_main(void)
 {
     // Used eventfds:
@@ -118,10 +107,5 @@ void app_main(void)
     esp_br_web_start("/spiffs");
 #endif
 
-  otSockAddr aSockName;
-  otUdpSocket aSocket;
-  udpSendInfinite(esp_openthread_get_instance(),
-                  UDP_SOCK_PORT, UDP_DEST_PORT,
-                  &aSockName, &aSocket);
     return;
   }

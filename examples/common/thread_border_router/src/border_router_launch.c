@@ -8,6 +8,7 @@
 #include "border_router_launch.h"
 
 #include "utilities.h"
+#include "ot_send.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -90,6 +91,39 @@ static void rcp_failure_handler(void)
     try_update_ot_rcp(&s_openthread_platform_config);
 #endif // CONFIG_OPENTHREAD_BR_AUTO_UPDATE_RCP
     esp_rcp_reset();
+}
+
+/**
+ * I learned how to create a custom OpenThread command from the following resources:
+ *
+ * https://github.com/openthread/openthread/blob/a193a6f23a70fd2413538d251328eb027dcb5cf3/src/posix/main.c#L392
+ * https://github.com/search?q=repo%3Aopenthread/openthread%20otCliVendorSetUserCommands&type=code
+ * https://github.com/openthread/openthread/blob/a5c17b77635bb43d02d4dec96fbf4b7eeb43be06/include/openthread/cli.h#L158
+*/
+
+static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
+  otSockAddr aSockName;
+  otUdpSocket aSocket;
+  udpSendInfinite(esp_openthread_get_instance(),
+                  UDP_SOCK_PORT, UDP_DEST_PORT,
+                  &aSockName, &aSocket);
+  return OT_ERROR_NONE;
+}
+
+#define COMMANDS_LENGTH 1
+
+static const otCliCommand commands[] = {
+  {"otsend", ot_send_command}
+};
+
+void otCliVendorSetUserCommands() {
+  otError error = otCliSetUserCommands(commands, COMMANDS_LENGTH, NULL);
+  if (error != OT_ERROR_NONE) {
+    otLogCritPlat("Failed to set custom commands.");
+  } else {
+    otLogNotePlat("Successfully set custom commands.");
+  }
+  return;
 }
 
 static void ot_task_worker(void *ctx)
