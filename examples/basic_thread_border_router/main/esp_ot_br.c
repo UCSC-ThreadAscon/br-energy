@@ -60,9 +60,6 @@ static void ot_br_external_coexist_init(void)
 }
 #endif /* CONFIG_EXTERNAL_COEX_ENABLE */
 
-static otSockAddr aSockName;
-static otUdpSocket aSocket;
-
 void app_main(void)
 {
     // Used eventfds:
