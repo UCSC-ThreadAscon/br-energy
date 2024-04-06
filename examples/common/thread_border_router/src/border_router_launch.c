@@ -111,7 +111,7 @@ void ot_send_start() {
 }
 
 static otError ot_send_command(void* aContext, uint8_t argsLength, char* aArgs[]) {
-  xTaskCreate(ot_send_start, "ot_send_infinite", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
+  xTaskCreate(ot_send_start, "ot_send", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
   return OT_ERROR_NONE;
 }
 
