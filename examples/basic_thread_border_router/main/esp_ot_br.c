@@ -109,13 +109,5 @@ void app_main(void)
 #if CONFIG_OPENTHREAD_BR_START_WEB
     esp_br_web_start("/spiffs");
 #endif
-
-  checkConnection(esp_openthread_get_instance());
-  aSockName.mAddress = *otThreadGetMeshLocalEid(esp_openthread_get_instance());
-  aSockName.mPort = UDP_SOCK_PORT;
-  udpCreateSocket(&aSocket, esp_openthread_get_instance(), &aSockName);
-
-  udpSendInfinite(esp_openthread_get_instance(), aSockName.mPort,
-                  UDP_DEST_PORT, &aSockName, &aSocket);
     return;
   }
