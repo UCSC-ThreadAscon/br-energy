@@ -8,6 +8,12 @@ menu "ESP Thread Border Router Example"
         help
             Set the 802.15.4 transmission power (in dBm) for OpenThread.
             The recommended TX power values are 20 dBm, 9 dBm, 0 dBm, and -25 dBm.
+
+      config RECEIVER_ADDRESS
+        string 'The IPv6 address of the receiver'
+        default "ff03::1"
+        help
+            The IPv6 address of the receiver that the sender will send packets to.
     endmenu
 
     choice ESP_BR_BOARD_TYPE
