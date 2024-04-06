@@ -1,4 +1,5 @@
 #include "ot_send.h"
+#include "esp_openthread_lock.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -77,7 +78,9 @@ void udpSendInfinite(otInstance *aInstance,
 
 
   while (true) {
+    esp_openthread_lock_acquire(portMAX_DELAY);
     udpTransmitMessage(aInstance, port, destPort, aSocket, &aMessageInfo);
+    esp_openthread_lock_release();
 
     vTaskDelay(MS_TO_TICKS(PACKET_SEND_DELAY_MS));
   }
