@@ -91,6 +91,7 @@ void getPayload(const otMessage *aMessage, void* buffer);
 otError createAPeriodicResource(otCoapResource *aperiodic);
 otError createPeriodicResource(otCoapResource *periodic);
 uint32_t aperiodicWaitTimeMs();
+void aperiodicWorker(void *context);
 
 /* ---- CoAP Secure Client API ---- */
 void clientConnect(const otSockAddr *socket);
