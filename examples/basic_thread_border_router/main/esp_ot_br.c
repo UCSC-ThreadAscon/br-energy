@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "workload.h"
+
 #include "esp_check.h"
 #include "esp_err.h"
 #include "esp_event.h"
@@ -106,5 +108,33 @@ void app_main(void)
 #if CONFIG_OPENTHREAD_BR_START_WEB
     esp_br_web_start("/spiffs");
 #endif
+
+    /** ---- Set up the CoAP Server ---- */
+    checkConnection(OT_INSTANCE);
+    x509Init();
+
+    otError error =
+      otCoapSecureStartWithMaxConnAttempts(OT_INSTANCE, COAP_SECURE_SERVER_PORT,
+                                           0, NULL, NULL);
+
+    if (error != OT_ERROR_NONE) {
+      otLogCritPlat("Failed to start COAPS server.");
+    } else {
+      otLogNotePlat("Started CoAPS server at port %d.",
+                    COAP_SECURE_SERVER_PORT);
+    }
+
+    // CoAP server handling aperiodic packets.
+    otCoapResource aPeriodicResource;
+    createAPeriodicResource(&aPeriodicResource);
+    otCoapSecureAddResource(OT_INSTANCE, &aPeriodicResource);
+    otLogNotePlat("Set up resource URI: '%s'.", aPeriodicResource.mUriPath);
+
+    // CoAP server for handling periodic packets.
+    otCoapResource periodicResource;
+    createPeriodicResource(&periodicResource);
+    otCoapSecureAddResource(OT_INSTANCE, &periodicResource);
+    otLogNotePlat("Set up resource URI: '%s'.", periodicResource.mUriPath);
+
     return;
   }
