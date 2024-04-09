@@ -5,21 +5,25 @@
 static otCoapResource *aPeriodicResource;
 static otCoapResource *periodicResource;
 
+void startCoapServer(uint16_t port) {
+  otError error = otCoapSecureStartWithMaxConnAttempts(
+                    OT_INSTANCE, port,
+                    0, NULL, NULL);
+
+  if (error != OT_ERROR_NONE) {
+    otLogCritPlat("Failed to start COAPS server.");
+  } else {
+    otLogNotePlat("Started CoAPS server at port %d.", port);
+  }
+  return;
+}
+
 otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) 
 {
   checkConnection(OT_INSTANCE);
   x509Init();
 
-  otError error =
-    otCoapSecureStartWithMaxConnAttempts(OT_INSTANCE, COAP_SECURE_SERVER_PORT,
-                                          0, NULL, NULL);
-
-  if (error != OT_ERROR_NONE) {
-    otLogCritPlat("Failed to start COAPS server.");
-  } else {
-    otLogNotePlat("Started CoAPS server at port %d.",
-                  COAP_SECURE_SERVER_PORT);
-  }
+  startCoapServer(COAP_SECURE_SERVER_PORT);
 
   /**
    * Allocate HEAP Memory to create APeriodic resource.
