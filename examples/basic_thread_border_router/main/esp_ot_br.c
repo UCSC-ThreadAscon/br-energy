@@ -34,6 +34,7 @@
 #endif
 
 #define TAG "esp_ot_br"
+#define COAP_SECURE_SERVER_PORT CONFIG_COAP_SECURE_SERVER_PORT
 
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
@@ -109,8 +110,39 @@ void app_main(void)
     esp_br_web_start("/spiffs");
 #endif
 
-    /** ---- Set up the CoAP Server ---- */
-    xTaskCreate(aperiodicWorker, "server_and_aperiodic_worker", 10240,
-                xTaskGetCurrentTaskHandle(), 5, NULL);
+    /** Set up CoAP server and client for sending aperiodic packets. */
+    checkConnection(OT_INSTANCE);
+    x509Init();
+
+    otError error =
+      otCoapSecureStartWithMaxConnAttempts(OT_INSTANCE, COAP_SECURE_SERVER_PORT,
+                                           0, NULL, NULL);
+
+    if (error != OT_ERROR_NONE) {
+      otLogCritPlat("Failed to start COAPS server.");
+    } else {
+      otLogNotePlat("Started CoAPS server at port %d.",
+                    COAP_SECURE_SERVER_PORT);
+    }
+
+    /**
+     * Allocate HEAP Memory to create APeriodic resource.
+    */
+    otCoapResource *aPeriodicResource = calloc(1, sizeof(otCoapResource));
+    createAPeriodicResource(aPeriodicResource);
+    otCoapSecureAddResource(OT_INSTANCE, aPeriodicResource);
+    otLogNotePlat("Set up resource URI: '%s'.", aPeriodicResource->mUriPath);
+
+    /**
+     * Allocate HEAP Memory to create Periodic resource.
+    */
+    otCoapResource *periodicResource = calloc(1, sizeof(otCoapResource));
+    createPeriodicResource(periodicResource);
+    otCoapSecureAddResource(OT_INSTANCE, periodicResource);
+    otLogNotePlat("Set up resource URI: '%s'.", periodicResource->mUriPath);
+
+    // while (true) {
+    //   vTaskDelay(MAIN_WAIT_TIME);
+    // }
     return;
   }
