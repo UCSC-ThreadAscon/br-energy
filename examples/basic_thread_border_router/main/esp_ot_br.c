@@ -35,6 +35,8 @@
 
 #define TAG "esp_ot_br"
 
+#define COAP_SECURE_SERVER_PORT CONFIG_COAP_SECURE_SERVER_PORT
+
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
