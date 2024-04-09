@@ -82,6 +82,10 @@ typedef enum type {
   Periodic = 1
 } type;
 
+/** ---- CoAP Secure CLI ---- */
+otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]);
+otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[]);
+
 /** ---- CoAP Secure Common API ---- */
 void x509Init();
 uint16_t getPayloadLength(const otMessage *aMessage);

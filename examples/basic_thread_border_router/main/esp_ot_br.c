@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "workload.h"
-
 #include "esp_check.h"
 #include "esp_err.h"
 #include "esp_event.h"
@@ -109,40 +107,5 @@ void app_main(void)
 #if CONFIG_OPENTHREAD_BR_START_WEB
     esp_br_web_start("/spiffs");
 #endif
-
-    /** Set up CoAP server and client for sending aperiodic packets. */
-    checkConnection(OT_INSTANCE);
-    x509Init();
-
-    otError error =
-      otCoapSecureStartWithMaxConnAttempts(OT_INSTANCE, COAP_SECURE_SERVER_PORT,
-                                           0, NULL, NULL);
-
-    if (error != OT_ERROR_NONE) {
-      otLogCritPlat("Failed to start COAPS server.");
-    } else {
-      otLogNotePlat("Started CoAPS server at port %d.",
-                    COAP_SECURE_SERVER_PORT);
-    }
-
-    /**
-     * Allocate HEAP Memory to create APeriodic resource.
-    */
-    otCoapResource *aPeriodicResource = calloc(1, sizeof(otCoapResource));
-    createAPeriodicResource(aPeriodicResource);
-    otCoapSecureAddResource(OT_INSTANCE, aPeriodicResource);
-    otLogNotePlat("Set up resource URI: '%s'.", aPeriodicResource->mUriPath);
-
-    /**
-     * Allocate HEAP Memory to create Periodic resource.
-    */
-    otCoapResource *periodicResource = calloc(1, sizeof(otCoapResource));
-    createPeriodicResource(periodicResource);
-    otCoapSecureAddResource(OT_INSTANCE, periodicResource);
-    otLogNotePlat("Set up resource URI: '%s'.", periodicResource->mUriPath);
-
-    // while (true) {
-    //   vTaskDelay(MAIN_WAIT_TIME);
-    // }
     return;
   }

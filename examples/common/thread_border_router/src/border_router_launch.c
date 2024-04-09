@@ -7,6 +7,8 @@
 
 #include "border_router_launch.h"
 
+#include "workload.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,6 +46,23 @@
 
 #define TAG "esp_ot_br"
 #define RCP_VERSION_MAX_SIZE 100
+
+#define COMMANDS_LENGTH 2
+
+static const otCliCommand commands[] = {
+  {"exp-server-start", expServerStart},
+  {"exp-server-free", expServerFree}
+};
+
+void otCliVendorSetUserCommands() {
+  otError error = otCliSetUserCommands(commands, COMMANDS_LENGTH, NULL);
+  if (error != OT_ERROR_NONE) {
+    otLogCritPlat("Failed to set custom commands.");
+  } else {
+    otLogNotePlat("Successfully set custom commands.");
+  }
+  return;
+}
 
 static esp_openthread_platform_config_t s_openthread_platform_config;
 
