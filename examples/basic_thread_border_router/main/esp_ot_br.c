@@ -138,5 +138,8 @@ void app_main(void)
     otCoapSecureAddResource(OT_INSTANCE, &periodicResource);
     otLogNotePlat("Set up resource URI: '%s'.", periodicResource.mUriPath);
 
+    while (true) {
+      vTaskDelay(MAIN_WAIT_TIME);
+    }
     return;
   }
