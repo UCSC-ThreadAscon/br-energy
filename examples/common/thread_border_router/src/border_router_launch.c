@@ -47,11 +47,12 @@
 #define TAG "esp_ot_br"
 #define RCP_VERSION_MAX_SIZE 100
 
-#define COMMANDS_LENGTH 2
+#define COMMANDS_LENGTH 3
 
 static const otCliCommand commands[] = {
   {"exp-server-start", expServerStart},
-  {"exp-server-free", expServerFree}
+  {"exp-server-free", expServerFree},
+  {"exp-server-aperiodic", expServerAperiodic},
 };
 
 void otCliVendorSetUserCommands() {
