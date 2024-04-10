@@ -13,7 +13,7 @@ void startCoapServer(uint16_t port) {
   if (error != OT_ERROR_NONE) {
     otLogCritPlat("Failed to start COAPS server.");
   } else {
-    otLogNotePlat("Started CoAPS server at port %d.", port);
+    otLogNotePlat("Started CoAP server at port %d.", port);
   }
   return;
 }
