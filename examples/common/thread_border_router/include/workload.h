@@ -72,7 +72,7 @@ void handleError(otError error, char* desc);
 #define PERIODIC_URI "periodic"
 #define APERIODIC_URI "aperiodic"
 #define APERIODIC_PAYLOAD_SIZE 5
-#define PERIODIC_PAYLOAD_SIZE 80
+#define PERIODIC_PAYLOAD_SIZE 216
 #define PERIODIC_WAIT_TIME_MS CONFIG_PERIODIC_WAIT_TIME
 
 #define COAP_SOCK_PORT OT_DEFAULT_COAP_PORT
