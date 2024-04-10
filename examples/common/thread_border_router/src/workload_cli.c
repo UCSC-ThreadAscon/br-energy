@@ -1,14 +1,14 @@
 #include "workload.h"
 
-#define COAP_SECURE_SERVER_PORT CONFIG_COAP_SECURE_SERVER_PORT
+#define COAP_PORT_1 5685
+#define COAP_PORT_2 5686
+#define COAP_PORT_3 5687
 
 static otCoapResource *aPeriodicResource;
 static otCoapResource *periodicResource;
 
 void startCoapServer(uint16_t port) {
-  otError error = otCoapSecureStartWithMaxConnAttempts(
-                    OT_INSTANCE, port,
-                    0, NULL, NULL);
+  otError error = otCoapStart(OT_INSTANCE, port);
 
   if (error != OT_ERROR_NONE) {
     otLogCritPlat("Failed to start COAPS server.");
@@ -21,16 +21,17 @@ void startCoapServer(uint16_t port) {
 otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) 
 {
   checkConnection(OT_INSTANCE);
-  x509Init();
 
-  startCoapServer(COAP_SECURE_SERVER_PORT);
+  startCoapServer(COAP_PORT_1);
+  startCoapServer(COAP_PORT_2);
+  startCoapServer(COAP_PORT_3);
 
   /**
    * Allocate HEAP Memory to create APeriodic resource.
   */
   aPeriodicResource = calloc(1, sizeof(otCoapResource));
   createAPeriodicResource(aPeriodicResource);
-  otCoapSecureAddResource(OT_INSTANCE, aPeriodicResource);
+  otCoapAddResource(OT_INSTANCE, aPeriodicResource);
   otLogNotePlat("Set up resource URI: '%s'.", aPeriodicResource->mUriPath);
 
   /**
@@ -38,7 +39,7 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
   */
   periodicResource = calloc(1, sizeof(otCoapResource));
   createPeriodicResource(periodicResource);
-  otCoapSecureAddResource(OT_INSTANCE, periodicResource);
+  otCoapAddResource(OT_INSTANCE, periodicResource);
   otLogNotePlat("Set up resource URI: '%s'.", periodicResource->mUriPath);
 
   return OT_ERROR_NONE;
@@ -46,14 +47,10 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
 
 otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[])
 {
-  otCoapSecureRemoveResource(OT_INSTANCE, periodicResource);
-  otCoapSecureRemoveResource(OT_INSTANCE, aPeriodicResource);
+  otCoapRemoveResource(OT_INSTANCE, periodicResource);
+  otCoapRemoveResource(OT_INSTANCE, aPeriodicResource);
 
-  if (otCoapSecureIsConnectionActive(OT_INSTANCE)) {
-    otCoapSecureDisconnect(OT_INSTANCE);
-  }
-
-  otCoapSecureStop(OT_INSTANCE);
+  otCoapStop(OT_INSTANCE);
   free(periodicResource);
   free(aPeriodicResource);
 

@@ -1,11 +1,8 @@
 /**
- * All of the code in this file is based upon the CoAP source code used
- * as a part of the OpenThread codebase.
+ * All of the code in this file is based upon the both CoAP and CoAP secure
+ * source code used as a part of the OpenThread codebase.
  *
- * https://github.com/openthread/openthread/blob/main/src/cli/cli_coap_secure.cpp
- * https://github.com/openthread/openthread/blob/main/include/openthread/coap_secure.h
- * https://github.com/openthread/openthread/blob/main/include/openthread/coap.h
- * https://github.com/openthread/openthread/blob/main/src/cli/README_COAPS.md
+ * https://github.com/UCSC-ThreadAscon/openthread/tree/main/src/cli
 */
 #include "workload.h"
 
@@ -37,7 +34,7 @@ void printCoapRequest(otMessage *aMessage,
 
 /**
  * This function is a modified version of `HandleRequest()`
- * from the OpenThread CLI CoAP source code:
+ * from the OpenThread CLI Secure CoAP source code:
  * https://github.com/UCSC-ThreadAscon/openthread/blob/main/src/cli/cli_coap_secure.cpp#L814
 */
 void sendCoapResponse(otMessage *aRequest, const otMessageInfo *aRequestInfo)
@@ -66,7 +63,7 @@ void sendCoapResponse(otMessage *aRequest, const otMessageInfo *aRequestInfo)
                                               status);
     HandleMessageError("coap message init response", aResponse, error);
 
-    error = otCoapSecureSendResponse(OT_INSTANCE, aResponse, aRequestInfo);
+    error = otCoapSendResponse(OT_INSTANCE, aResponse, aRequestInfo);
     HandleMessageError("send response", aResponse, error);
   }
 

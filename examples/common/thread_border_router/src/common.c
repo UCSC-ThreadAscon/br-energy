@@ -25,24 +25,6 @@ void checkConnection(otInstance *aInstance) {
   return;
 }
 
-/**
- * Initializes the x509 certification and private key. The code for this function
- * comes from the OpenThread source code.
- * https://github.com/openthread/openthread/blob/main/src/cli/cli_coap_secure.cpp#L717
-*/
-void x509Init()
-{
-  otInstance *aInstance = esp_openthread_get_instance();
-  
-    otCoapSecureSetCertificate(aInstance, (const uint8_t *) OT_CLI_COAPS_X509_CERT,
-                               sizeof(OT_CLI_COAPS_X509_CERT), (const uint8_t *) OT_CLI_COAPS_PRIV_KEY,
-                               sizeof(OT_CLI_COAPS_PRIV_KEY));
-
-    otCoapSecureSetCaCertificateChain(aInstance, (const uint8_t *) OT_CLI_COAPS_TRUSTED_ROOT_CERTIFICATE,
-                                      sizeof(OT_CLI_COAPS_TRUSTED_ROOT_CERTIFICATE));
-  return;
-}
-
 uint16_t getPayloadLength(const otMessage *aMessage) {
   return otMessageGetLength(aMessage) - otMessageGetOffset(aMessage);
 }
