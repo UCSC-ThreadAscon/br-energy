@@ -1,9 +1,5 @@
 #include "workload.h"
 
-#define COAP_PORT_1 5685
-#define COAP_PORT_2 5686
-#define COAP_PORT_3 5687
-
 static otCoapResource *aPeriodicResource;
 static otCoapResource *periodicResource;
 
@@ -22,9 +18,7 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
 {
   checkConnection(OT_INSTANCE);
 
-  startCoapServer(COAP_PORT_1);
-  startCoapServer(COAP_PORT_2);
-  startCoapServer(COAP_PORT_3);
+  startCoapServer(OT_DEFAULT_COAP_PORT);
 
   /**
    * Allocate HEAP Memory to create APeriodic resource.
