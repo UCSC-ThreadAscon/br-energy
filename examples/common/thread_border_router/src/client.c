@@ -91,7 +91,7 @@ void clientConnect(const otSockAddr *socket) {
   return;
 }
 
-void clientDisconect() {
+void clientDisconnect() {
   otCoapSecureDisconnect(OT_INSTANCE);
   return;
 }
