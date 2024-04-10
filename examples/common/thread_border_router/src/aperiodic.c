@@ -57,18 +57,18 @@ static const char* clientAddresses[3] = {
 };
 
 void aperiodicWorkerThread(void *context) {
-  otSockAddr socket;
-  otIp6Address server;
-
-  EmptyMemory(&socket, sizeof(otSockAddr));
-  EmptyMemory(&server, sizeof(otIp6Address));
-
-  uint16_t index = esp_random() % 3;
-  otIp6AddressFromString(clientAddresses[index], &server);
-  socket.mAddress = server;
-  socket.mPort = COAP_SOCK_PORT;
-
   while (true) {
+    otSockAddr socket;
+    otIp6Address server;
+
+    EmptyMemory(&socket, sizeof(otSockAddr));
+    EmptyMemory(&server, sizeof(otIp6Address));
+
+    uint16_t index = esp_random() % 3;
+    otIp6AddressFromString(clientAddresses[index], &server);
+    socket.mAddress = server;
+    socket.mPort = COAP_SOCK_PORT;
+
     sendRequest(APeriodic, &socket);
 
     uint32_t nextWaitTime = aperiodicWaitTimeMs();
