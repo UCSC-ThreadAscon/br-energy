@@ -8,13 +8,6 @@ menu "ESP Thread Border Router Example"
         help
             Set the 802.15.4 transmission power (in dBm) for OpenThread.
             The recommended TX power values are 20 dBm, 9 dBm, 0 dBm, and -25 dBm.
-
-      config COAP_SECURE_SERVER_PORT
-        int 'The port number for the CoAP secure server.'
-        default 5684
-        help
-            Sets the port used by CoAP secure server side. The client
-            will connect to this point when establishing a DTLS connection.
     endmenu
 
     choice ESP_BR_BOARD_TYPE

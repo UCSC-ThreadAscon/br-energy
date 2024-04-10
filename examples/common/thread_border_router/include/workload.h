@@ -72,16 +72,19 @@ void handleError(otError error, char* desc);
 #define PERIODIC_URI "periodic"
 #define APERIODIC_URI "aperiodic"
 #define APERIODIC_PAYLOAD_SIZE 5
-#define PERIODIC_PAYLOAD_SIZE 219
-#define PERIODIC_WAIT_TIME_MS 60000 // 60 seconds
+#define PERIODIC_PAYLOAD_SIZE 80
+#define PERIODIC_WAIT_TIME_MS CONFIG_PERIODIC_WAIT_TIME
+
+#define COAP_SOCK_PORT OT_DEFAULT_COAP_PORT
 
 typedef enum type {
   APeriodic = 0,
   Periodic = 1
 } type;
 
-/** ---- CoAP CLI ---- */
-otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]);
+/** ---- CoAP CLI API ---- */
+otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) ;
+otError expServerAperiodic(void* aContext, uint8_t argsLength, char* aArgs[]);
 otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[]);
 
 /** ---- CoAP Common API ---- */
@@ -92,10 +95,7 @@ void getPayload(const otMessage *aMessage, void* buffer);
 otError createAPeriodicResource(otCoapResource *aperiodic);
 otError createPeriodicResource(otCoapResource *periodic);
 uint32_t aperiodicWaitTimeMs();
-void aperiodicWorker(void *context);
 
 /* ---- CoAP Client API ---- */
-void clientConnect(const otSockAddr *socket);
-void clientDisconnect();
-void sendRequest(type type, otIp6Address *dest);
-void periodicWorker(void* context);
+void aperiodicWorkerThread(void *context);
+void sendRequest(type type, otSockAddr *socket);

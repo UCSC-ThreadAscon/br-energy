@@ -49,3 +49,40 @@ uint32_t aperiodicWaitTimeMs() {
   double waitTimeMsFloor = floor(waitTimeMs);
   return (uint32_t) waitTimeMsFloor;
 }
+
+void aperiodicWorkerThread(void *context) {
+  otSockAddr socket;
+  otIp6Address server;
+
+  EmptyMemory(&socket, sizeof(otSockAddr));
+  EmptyMemory(&server, sizeof(otIp6Address));
+
+  otIp6AddressFromString("fd84:7733:23a0:f199:b184:cbdb:12e4:ef9d", &server);
+  socket.mAddress = server;
+  socket.mPort = COAP_SOCK_PORT;
+
+  while (true) {
+    sendRequest(APeriodic, &socket);
+
+    uint32_t nextWaitTime = aperiodicWaitTimeMs();
+    otLogNotePlat(
+      "Will wait %" PRIu32 " ms before sending next aperiodic CoAP request.",
+      nextWaitTime
+    );
+
+    TickType_t lastWakeupTime = xTaskGetTickCount();
+
+    /**
+     * If quotient "nextWaitTime" < "portTICK_PERIOD_MS", then
+     * MS_TO_TICKS(nextWaitTime) == 0, causing `vTaskDelayUntil()`
+     * to crash. When this happens, set the delay to be exactly
+     * `portTICK_PERIOD_MS`.
+    */
+    TickType_t nextWaitTimeTicks =
+      MS_TO_TICKS(nextWaitTime) == 0 ? portTICK_PERIOD_MS :
+        MS_TO_TICKS(nextWaitTime);
+
+    vTaskDelayUntil(&lastWakeupTime, nextWaitTimeTicks);
+    }
+  return;
+}
