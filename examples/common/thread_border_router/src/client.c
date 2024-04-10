@@ -29,6 +29,9 @@ void handleResponse(void *aContext,
     otLogNotePlat("Response from %s of size %" PRIu16 " bytes.",
                   senderAddr, payloadLen);
   }
+
+  otLogNotePlat("End CoAP DTLS Connection.");
+  clientDisconnect();
   return;
 }
 
