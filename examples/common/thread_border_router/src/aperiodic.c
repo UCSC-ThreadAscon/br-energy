@@ -50,6 +50,12 @@ uint32_t aperiodicWaitTimeMs() {
   return (uint32_t) waitTimeMsFloor;
 }
 
+static const char* clientAddresses[3] = {
+  "fd84:7733:23a0:f199:b184:cbdb:12e4:ef9d",
+  "fd84:7733:23a0:f199:d4ef:3f45:f341:500a",
+  "fd84:7733:23a0:f199:fb4d:61da:c6d8:60c3"
+};
+
 void aperiodicWorkerThread(void *context) {
   otSockAddr socket;
   otIp6Address server;
@@ -57,7 +63,8 @@ void aperiodicWorkerThread(void *context) {
   EmptyMemory(&socket, sizeof(otSockAddr));
   EmptyMemory(&server, sizeof(otIp6Address));
 
-  otIp6AddressFromString("fd84:7733:23a0:f199:b184:cbdb:12e4:ef9d", &server);
+  uint16_t index = esp_random() % 3;
+  otIp6AddressFromString(clientAddresses[index], &server);
   socket.mAddress = server;
   socket.mPort = COAP_SOCK_PORT;
 
