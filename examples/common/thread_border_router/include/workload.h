@@ -1,4 +1,4 @@
-#include <openthread/logging.h>
+#include "experiment.h"
 
 #include "esp_err.h"
 #include "esp_log.h"
@@ -68,12 +68,6 @@ void handleError(otError error, char* desc);
     handleError(error, desc);                           \
     return;                                             \
   }                                                     \
-
-#define PERIODIC_URI "periodic"
-#define APERIODIC_URI "aperiodic"
-#define APERIODIC_PAYLOAD_SIZE 5
-#define PERIODIC_PAYLOAD_SIZE 248
-#define PERIODIC_WAIT_TIME_MS CONFIG_PERIODIC_WAIT_TIME
 
 #define COAP_SOCK_PORT OT_DEFAULT_COAP_PORT
 
