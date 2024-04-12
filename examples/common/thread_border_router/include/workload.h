@@ -84,7 +84,6 @@ typedef enum type {
 
 /** ---- CoAP CLI API ---- */
 otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) ;
-otError expServerAperiodic(void* aContext, uint8_t argsLength, char* aArgs[]);
 otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[]);
 
 /** ---- CoAP Common API ---- */
@@ -94,8 +93,3 @@ void getPayload(const otMessage *aMessage, void* buffer);
 /* ---- CoAP Server API ---- */
 otError createAPeriodicResource(otCoapResource *aperiodic);
 otError createPeriodicResource(otCoapResource *periodic);
-uint32_t aperiodicWaitTimeMs();
-
-/* ---- CoAP Client API ---- */
-void aperiodicWorkerThread(void *context);
-void sendRequest(type type, otSockAddr *socket);

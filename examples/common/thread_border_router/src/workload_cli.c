@@ -17,11 +17,10 @@ void startCoapServer(uint16_t port) {
 otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) 
 {
   checkConnection(OT_INSTANCE);
-
   startCoapServer(OT_DEFAULT_COAP_PORT);
 
   /**
-   * Allocate HEAP Memory to create APeriodic resource.
+   * Allocate HEAP Memory for resource that receive packets from Scenario 1.
   */
   aPeriodicResource = calloc(1, sizeof(otCoapResource));
   createAPeriodicResource(aPeriodicResource);
@@ -29,20 +28,13 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
   otLogNotePlat("Set up resource URI: '%s'.", aPeriodicResource->mUriPath);
 
   /**
-   * Allocate HEAP Memory to create Periodic resource.
+   * Allocate HEAP Memory for resource that receive packets from Scenario 2.
   */
   periodicResource = calloc(1, sizeof(otCoapResource));
   createPeriodicResource(periodicResource);
   otCoapAddResource(OT_INSTANCE, periodicResource);
   otLogNotePlat("Set up resource URI: '%s'.", periodicResource->mUriPath);
 
-  return OT_ERROR_NONE;
-}
-
-otError expServerAperiodic(void* aContext, uint8_t argsLength, char* aArgs[])
-{
-  xTaskCreate(aperiodicWorkerThread, "aperiodic_client", 10240,
-              NULL, 5, NULL);
   return OT_ERROR_NONE;
 }
 
