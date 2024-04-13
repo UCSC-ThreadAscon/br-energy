@@ -11,7 +11,7 @@
 #define PERIODIC_URI "periodic"
 #define APERIODIC_URI "aperiodic"
 
-#define APERIODIC_PAYLOAD_SIZE 5
+#define APERIODIC_PAYLOAD_SIZE 4
 #define PERIODIC_PAYLOAD_SIZE 216
 
 #endif // EXPERIMENT_H
