@@ -39,6 +39,8 @@ otError getTxPower(int8_t *aPowerAddr)
   }                                                         \
 
 void setTxPower() {
+  int8_t temp; GetTxPowerOrExit(&temp);
+
   otError error = otPlatRadioSetTransmitPower(esp_openthread_get_instance(),
                                               CONFIG_TX_POWER);
   switch(error)
@@ -54,5 +56,8 @@ void setTxPower() {
     default:
         UnhandledError();
   }
+
+  int8_t currentPower; GetTxPowerOrExit(&currentPower);
+  assert(currentPower == CONFIG_TX_POWER);
   return;
 }
