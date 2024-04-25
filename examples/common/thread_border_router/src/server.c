@@ -19,13 +19,9 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
 
 void printCoapRequest(otMessage *aMessage,
                       uint32_t payloadLen,
-                      char *ipString,
-                      type type) 
+                      char *ipString) 
 {
-  uint16_t payloadSize =
-    type == APeriodic ? APERIODIC_PAYLOAD_SIZE : PERIODIC_PAYLOAD_SIZE;
-
-  char payload[payloadSize];
+  char payload[PAYLOAD_SIZE];
   getPayload(aMessage, payload);
   otLogNotePlat("Received %" PRIu32 " bytes from %s.",
                 payloadLen, ipString);
@@ -33,8 +29,8 @@ void printCoapRequest(otMessage *aMessage,
 }
 
 /**
- * This function is a modified version of `HandleRequest()`
- * from the OpenThread CLI Secure CoAP source code:
+ * This function is a modified version of `HandleRequest()` from the OpenThread CLI
+ * Secure CoAP source code:
  * https://github.com/UCSC-ThreadAscon/openthread/blob/main/src/cli/cli_coap_secure.cpp#L814
 */
 void sendCoapResponse(otMessage *aRequest, const otMessageInfo *aRequestInfo)
@@ -70,10 +66,9 @@ void sendCoapResponse(otMessage *aRequest, const otMessageInfo *aRequestInfo)
   return;
 }
 
-void requestHandler(void *aContext,
+void requestHandler(void* aContext,
                     otMessage *aMessage,
-                    const otMessageInfo *aMessageInfo,
-                    type type)
+                    const otMessageInfo *aMessageInfo)
 {
   uint32_t length = getPayloadLength(aMessage);
 
@@ -81,40 +76,16 @@ void requestHandler(void *aContext,
   EmptyMemory(senderAddress, OT_IP6_ADDRESS_STRING_SIZE);
 
   getPeerAddrString(aMessageInfo, senderAddress);
-  printCoapRequest(aMessage, length, senderAddress, type);
+  printCoapRequest(aMessage, length, senderAddress);
 
   sendCoapResponse(aMessage, aMessageInfo);
   return;
 }
 
-void periodicRequestHandler(void *aContext,
-                            otMessage *aMessage,
-                            const otMessageInfo *aMessageInfo)
-{
-  requestHandler(aContext, aMessage, aMessageInfo, Periodic);
-  return;
-}
-
-void aPeriodicRequestHandler(void *aContext,
-                            otMessage *aMessage,
-                            const otMessageInfo *aMessageInfo)
-{
-  requestHandler(aContext, aMessage, aMessageInfo, APeriodic);
-  return;
-}
-
-otError createAPeriodicResource(otCoapResource *aperiodic) {
-  aperiodic->mNext = NULL;
-  aperiodic->mContext = NULL;
-  aperiodic->mUriPath = "aperiodic";
-  aperiodic->mHandler = aPeriodicRequestHandler;
-  return OT_ERROR_NONE;
-}
-
-otError createPeriodicResource(otCoapResource *periodic) {
-  periodic->mNext = NULL;
-  periodic->mContext = NULL;
-  periodic->mUriPath = "periodic";
-  periodic->mHandler = periodicRequestHandler;
+otError createResource(otCoapResource *resource) {
+  resource->mNext = NULL;
+  resource->mContext = NULL;
+  resource->mUriPath = URI;
+  resource->mHandler = requestHandler;
   return OT_ERROR_NONE;
 }
