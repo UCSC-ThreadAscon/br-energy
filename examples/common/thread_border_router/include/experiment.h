@@ -1,5 +1,4 @@
-#ifndef EXPERIMENT_H
-#define EXPERIMENT_H
+#pragma once
 
 /**
  * This part of the header defines the constants to be used in the experiments,
@@ -15,5 +14,3 @@
  * an even has occured.
 */
 #define PAYLOAD_SIZE 17
-
-#endif // EXPERIMENT_H
