@@ -26,6 +26,7 @@ static bool firstBattery = true;
 void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString) {
   if (firstBattery) {
     otLogNotePlat("First battery packet sent by %s.", ipString);
+    firstBattery = false;
   }
   else {
     uint64_t msElapsed = curBatteryMs - prevBatteryMs;
