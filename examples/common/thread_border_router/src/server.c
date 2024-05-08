@@ -23,8 +23,8 @@ void printEventPacket(otMessage *aMessage, char *ipString)
   EmptyMemory(&event, sizeof(EventPayload));
   getPayload(aMessage, &event);
 
-  char *occured = event.eventOccured ? "true" : "false";
-  otLogNotePlat("Event detected: %s from %s.", occured, ipString);
+  char *occured = event.eventOccured ? "Event detected" : "Event not detected";
+  otLogNotePlat("%s from %s.", occured, ipString);
 }
 
 void printBatteryPacket(otMessage *aMessage, char *ipString)
