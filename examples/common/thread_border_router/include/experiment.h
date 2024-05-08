@@ -1,8 +1,6 @@
 #ifndef EXPERIMENT_H
 #define EXPERIMENT_H
 
-#define POLL_PERIOD_MS CONFIG_POLL_PERIOD
-
 /**
  * This part of the header defines the constants to be used in the experiments,
  * in accordance to the Experimental Setup document:
