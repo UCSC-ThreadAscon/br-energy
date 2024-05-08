@@ -1,7 +1,14 @@
 #pragma once
 
+#include "uuid.h"
+
 #define BATTERY_URI "battery"
 #define EVENT_URI "event"
+
+typedef enum Route {
+  Battery,
+  Event
+} Route;
 
 typedef struct EventPayload
 {

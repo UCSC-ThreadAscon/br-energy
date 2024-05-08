@@ -22,8 +22,8 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
   battery = calloc(1, sizeof(otCoapResource));
   event = calloc(1, sizeof(otCoapResource));
 
-  createResource(battery, "battery");
-  createResource(event, "event");
+  createResource(battery, Battery);
+  createResource(event, Event);
 
   otCoapAddResource(OT_INSTANCE, battery);
   otCoapAddResource(OT_INSTANCE, event);

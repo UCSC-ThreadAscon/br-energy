@@ -17,16 +17,22 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
   return;
 }
 
-void printCoapRequest(otMessage *aMessage,
-                      uint32_t payloadLen,
-                      char *ipString) 
+void printEventPacket(otMessage *aMessage, char *ipString)
 {
-  char payload[PAYLOAD_SIZE];
-  getPayload(aMessage, payload);
-  otLogNotePlat("Received %" PRIu32 " bytes from %s.",
-                payloadLen, ipString);
-  return;
+  EventPayload event;
+  getPayload(aMessage, &event);
+  char *occured = event.eventOccured ? "true" : "false";
+  otLogNotePlat("Event detected: %s from %s.", occured, ipString);
 }
+
+void printBatteryPacket(otMessage *aMessage, char *ipString)
+{
+  BatteryPayload battery;
+  getPayload(aMessage, &battery);
+  otLogNotePlat("Battery status report of %" PRIu8 " from %s.",
+                battery.batteryLife, ipString);
+  return;
+} 
 
 /**
  * This function is a modified version of `HandleRequest()` from the OpenThread CLI
@@ -66,26 +72,53 @@ void sendCoapResponse(otMessage *aRequest, const otMessageInfo *aRequestInfo)
   return;
 }
 
-void requestHandler(void* aContext,
-                    otMessage *aMessage,
-                    const otMessageInfo *aMessageInfo)
+void batteryRequestHandler(void* aContext,
+                           otMessage *aMessage,
+                           const otMessageInfo *aMessageInfo)
 {
   uint32_t length = getPayloadLength(aMessage);
+  assert(length == sizeof(BatteryPayload));
 
   char senderAddress[OT_IP6_ADDRESS_STRING_SIZE];
   EmptyMemory(senderAddress, OT_IP6_ADDRESS_STRING_SIZE);
 
   getPeerAddrString(aMessageInfo, senderAddress);
-  printCoapRequest(aMessage, length, senderAddress);
+  printBatteryPacket(aMessage, senderAddress);
 
   sendCoapResponse(aMessage, aMessageInfo);
   return;
 }
 
-otError createResource(otCoapResource *resource, const char* uri) {
+void eventRequestHandler(void* aContext,
+                         otMessage *aMessage,
+                         const otMessageInfo *aMessageInfo)
+{
+  uint32_t length = getPayloadLength(aMessage);
+  assert(length == sizeof(EventPayload));
+
+  char senderAddress[OT_IP6_ADDRESS_STRING_SIZE];
+  EmptyMemory(senderAddress, OT_IP6_ADDRESS_STRING_SIZE);
+
+  getPeerAddrString(aMessageInfo, senderAddress);
+  printEventPacket(aMessage, senderAddress);
+
+  sendCoapResponse(aMessage, aMessageInfo);
+  return;
+}
+
+
+otError createResource(otCoapResource *resource, Route route) {
   resource->mNext = NULL;
   resource->mContext = NULL;
-  resource->mUriPath = uri;
-  resource->mHandler = requestHandler;
+
+  if (route == Battery) {
+  resource->mUriPath = BATTERY_URI;
+  resource->mHandler = batteryRequestHandler;
+  }
+  else {
+  resource->mUriPath = EVENT_URI;
+  resource->mHandler = eventRequestHandler;
+  }
+
   return OT_ERROR_NONE;
 }
