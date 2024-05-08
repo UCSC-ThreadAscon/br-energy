@@ -1,6 +1,7 @@
 #include "workload.h"
 
-static otCoapResource *resource;
+static otCoapResource *battery;
+static otCoapResource *event;
 
 void startCoapServer(uint16_t port) {
   otError error = otCoapStart(OT_INSTANCE, port);
@@ -18,18 +19,30 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
   checkConnection(OT_INSTANCE);
   startCoapServer(OT_DEFAULT_COAP_PORT);
 
-  resource = calloc(1, sizeof(otCoapResource));
-  createResource(resource);
-  otCoapAddResource(OT_INSTANCE, resource);
-  otLogNotePlat("Set up resource URI: '%s'.", resource->mUriPath);
+  battery = calloc(1, sizeof(otCoapResource));
+  event = calloc(1, sizeof(otCoapResource));
+
+  createResource(battery, "battery");
+  createResource(event, "event");
+
+  otCoapAddResource(OT_INSTANCE, battery);
+  otCoapAddResource(OT_INSTANCE, event);
+
+  otLogNotePlat("Set up battery URI: '%s'.", battery->mUriPath);
+  otLogNotePlat("Set up event URI: '%s'.", event->mUriPath);
 
   return OT_ERROR_NONE;
 }
 
 otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[])
 {
-  otCoapRemoveResource(OT_INSTANCE, resource);
+  otCoapRemoveResource(OT_INSTANCE, battery);
+  otCoapRemoveResource(OT_INSTANCE, event);
+
   otCoapStop(OT_INSTANCE);
-  free(resource);
+
+  free(battery);
+  free(event);
+
   return OT_ERROR_NONE;
 }

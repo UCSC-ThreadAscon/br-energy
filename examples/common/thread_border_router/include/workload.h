@@ -71,11 +71,6 @@ void handleError(otError error, char* desc);
 
 #define COAP_SOCK_PORT OT_DEFAULT_COAP_PORT
 
-typedef enum type {
-  APeriodic = 0,
-  Periodic = 1
-} type;
-
 /** ---- CoAP CLI API ---- */
 otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) ;
 otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[]);
@@ -85,4 +80,4 @@ uint16_t getPayloadLength(const otMessage *aMessage);
 void getPayload(const otMessage *aMessage, void* buffer);
 
 /* ---- CoAP Server API ---- */
-otError createResource(otCoapResource *resource);
+otError createResource(otCoapResource *resource, const char *uri);

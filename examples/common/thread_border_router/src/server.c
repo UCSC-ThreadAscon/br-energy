@@ -82,10 +82,10 @@ void requestHandler(void* aContext,
   return;
 }
 
-otError createResource(otCoapResource *resource) {
+otError createResource(otCoapResource *resource, const char* uri) {
   resource->mNext = NULL;
   resource->mContext = NULL;
-  resource->mUriPath = URI;
+  resource->mUriPath = uri;
   resource->mHandler = requestHandler;
   return OT_ERROR_NONE;
 }
