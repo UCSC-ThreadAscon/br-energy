@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "stdint.h"
-#include "inttypes.h"
+#include <stdint.h>
+#include <inttypes.h>
 
 void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
   otIp6AddressToString(&(aMessageInfo->mPeerAddr), ipString,
@@ -20,7 +20,9 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
 void printEventPacket(otMessage *aMessage, char *ipString)
 {
   EventPayload event;
+  EmptyMemory(&event, sizeof(EventPayload));
   getPayload(aMessage, &event);
+
   char *occured = event.eventOccured ? "true" : "false";
   otLogNotePlat("Event detected: %s from %s.", occured, ipString);
 }
@@ -28,9 +30,12 @@ void printEventPacket(otMessage *aMessage, char *ipString)
 void printBatteryPacket(otMessage *aMessage, char *ipString)
 {
   BatteryPayload battery;
-  getPayload(aMessage, &battery);
+  EmptyMemory(&battery, sizeof(BatteryPayload));
+  getPayload(aMessage, (void *) &battery);
+
+  int batteryLife = (int) battery.batteryLife;
   otLogNotePlat("Battery status report of %" PRIu8 " from %s.",
-                battery.batteryLife, ipString);
+                batteryLife, ipString);
   return;
 } 
 
@@ -112,12 +117,12 @@ otError createResource(otCoapResource *resource, Route route) {
   resource->mContext = NULL;
 
   if (route == Battery) {
-  resource->mUriPath = BATTERY_URI;
-  resource->mHandler = batteryRequestHandler;
+    resource->mUriPath = BATTERY_URI;
+    resource->mHandler = batteryRequestHandler;
   }
   else {
-  resource->mUriPath = EVENT_URI;
-  resource->mHandler = eventRequestHandler;
+    resource->mUriPath = EVENT_URI;
+    resource->mHandler = eventRequestHandler;
   }
 
   return OT_ERROR_NONE;
