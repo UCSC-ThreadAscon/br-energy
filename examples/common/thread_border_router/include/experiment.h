@@ -3,6 +3,20 @@
 #define BATTERY_URI "battery"
 #define EVENT_URI "event"
 
+typedef struct EventPayload
+{
+  uuid deviceId;
+  bool eventOccured;
+}
+EventPayload;
+
+typedef struct BatteryPayload
+{
+  uuid deviceId;
+  uint8_t batteryLife;
+}
+BatteryPayload;
+
 /**
  * Payload size for both Event and Batty Lifetime packets are the same.
  * 128 bits (16 bytes) for the UUID, and 8 bits to either represent
