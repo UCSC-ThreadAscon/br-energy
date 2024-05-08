@@ -49,6 +49,9 @@ void printEventPacket(otMessage *aMessage, char *ipString)
   EmptyMemory(&event, sizeof(EventPayload));
   getPayload(aMessage, &event);
 
+#if PRINT_UPTIME
+  printUptime(ipString, Event);
+#endif
 #if PRINT_PAYLOADS
   char *occured = event.eventOccured ? "Event detected" : "Event not detected";
   otLogNotePlat("%s from %s.", occured, ipString);
@@ -61,6 +64,9 @@ void printBatteryPacket(otMessage *aMessage, char *ipString)
   EmptyMemory(&battery, sizeof(BatteryPayload));
   getPayload(aMessage, (void *) &battery);
 
+#if PRINT_UPTIME
+  printUptime(ipString, Battery);
+#endif
 #if PRINT_PAYLOADS
   int batteryLife = (int) battery.batteryLife;
   otLogNotePlat("Battery of %d from %s.", batteryLife, ipString);
@@ -110,10 +116,6 @@ void batteryRequestHandler(void* aContext,
                            otMessage *aMessage,
                            const otMessageInfo *aMessageInfo)
 {
-#if PRINT_UPTIME
-  printUptime(ipString, Battery);
-#endif
-
   uint32_t length = getPayloadLength(aMessage);
   assert(length == sizeof(BatteryPayload));
 
@@ -131,10 +133,6 @@ void eventRequestHandler(void* aContext,
                          otMessage *aMessage,
                          const otMessageInfo *aMessageInfo)
 {
-#if PRINT_UPTIME
-  printUptime(ipString, Event);
-#endif
-
   uint32_t length = getPayloadLength(aMessage);
   assert(length == sizeof(EventPayload));
 
