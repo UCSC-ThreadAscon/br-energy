@@ -34,8 +34,7 @@ void printBatteryPacket(otMessage *aMessage, char *ipString)
   getPayload(aMessage, (void *) &battery);
 
   int batteryLife = (int) battery.batteryLife;
-  otLogNotePlat("Battery status report of %" PRIu8 " from %s.",
-                batteryLife, ipString);
+  otLogNotePlat("Battery of %d from %s.", batteryLife, ipString);
   return;
 } 
 
