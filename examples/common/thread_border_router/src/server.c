@@ -11,9 +11,35 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+#define PRINT_UPTIME 1
+#define PRINT_PAYLOADS 0
+
 void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
   otIp6AddressToString(&(aMessageInfo->mPeerAddr), ipString,
                        OT_IP6_ADDRESS_STRING_SIZE);
+  return;
+}
+
+/**
+ * According the OpenThread Source Code:
+ * https://github.com/UCSC-ThreadAscon/openthread/blob/main/include/openthread/instance.h#L188
+ *
+ * The format of an uptime string is as follows:
+ *
+ * "<hh>:<mm>:<ss>.<mmmm>"          if less than a day
+ *
+ * "<dd>d.<hh>:<mm>:<ss>.<mmmm>"    if longer than a day
+*/
+void printUptime(char *ipString, Route route) {
+  char uptimeString[OT_UPTIME_STRING_SIZE];
+  EmptyMemory(&uptimeString, sizeof(uptimeString));
+
+  if (route == Battery) {
+    otLogNotePlat("[%s] Battery Packet sent by %s", uptimeString, ipString);
+  }
+  else {
+    otLogNotePlat("[%s] Event Packet sent by %s", uptimeString, ipString);
+  }
   return;
 }
 
@@ -23,8 +49,13 @@ void printEventPacket(otMessage *aMessage, char *ipString)
   EmptyMemory(&event, sizeof(EventPayload));
   getPayload(aMessage, &event);
 
+#if PRINT_UPTIME
+  printUptime(ipString, Event);
+#endif
+#if PRINT_PAYLOADS
   char *occured = event.eventOccured ? "Event detected" : "Event not detected";
   otLogNotePlat("%s from %s.", occured, ipString);
+#endif
 }
 
 void printBatteryPacket(otMessage *aMessage, char *ipString)
@@ -33,8 +64,13 @@ void printBatteryPacket(otMessage *aMessage, char *ipString)
   EmptyMemory(&battery, sizeof(BatteryPayload));
   getPayload(aMessage, (void *) &battery);
 
+#if PRINT_UPTIME
+  printUptime(ipString, Battery);
+#endif
+#if PRINT_PAYLOADS
   int batteryLife = (int) battery.batteryLife;
   otLogNotePlat("Battery of %d from %s.", batteryLife, ipString);
+#endif
   return;
 } 
 
