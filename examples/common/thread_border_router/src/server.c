@@ -55,11 +55,11 @@ void printUptime(char *ipString, Route route) {
                               sizeof(uptimeString));
 
   if (route == Battery) {
-    otLogNotePlat("[%s] Battery Packet sent by %s", uptimeString, ipString);
+    otLogNotePlat("[%s] Battery Packet sent by %s.", uptimeString, ipString);
     printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE), ipString);
   }
   else {
-    otLogNotePlat("[%s] Event Packet sent by %s", uptimeString, ipString);
+    otLogNotePlat("[%s] Event Packet sent by %s.", uptimeString, ipString);
   }
   return;
 }
