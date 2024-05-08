@@ -23,14 +23,14 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
 static uint64_t prevBatteryMs = 0;
 static bool firstBattery = true;
 
-void printMsElaspedBattery(uint64_t curBatteryMs) {
+void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString) {
   if (firstBattery) {
-    otLogNotePlat("First battery packet sent.");
+    otLogNotePlat("First battery packet sent by %s.", ipString);
   }
   else {
     uint64_t msElapsed = curBatteryMs - prevBatteryMs;
-    otLogNotePlat("%d ms elasped since last battery packet sent.",
-                  (int) msElapsed);
+    otLogNotePlat("%d ms since last battery packet by %s.",
+                  (int) msElapsed, ipString);
   }
 
   prevBatteryMs = curBatteryMs;
@@ -55,7 +55,7 @@ void printUptime(char *ipString, Route route) {
 
   if (route == Battery) {
     otLogNotePlat("[%s] Battery Packet sent by %s", uptimeString, ipString);
-    printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE));
+    printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE), ipString);
   }
   else {
     otLogNotePlat("[%s] Event Packet sent by %s", uptimeString, ipString);
