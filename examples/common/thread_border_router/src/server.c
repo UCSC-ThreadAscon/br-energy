@@ -33,7 +33,8 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
 void printUptime(char *ipString, Route route) {
   char uptimeString[OT_UPTIME_STRING_SIZE];
   EmptyMemory(&uptimeString, sizeof(uptimeString));
-  otInstanceGetUptimeAsString(OT_INSTANCE, &uptimeString, sizeof(uptimeString));
+  otInstanceGetUptimeAsString(OT_INSTANCE, (char *) uptimeString,
+                              sizeof(uptimeString));
 
   if (route == Battery) {
     otLogNotePlat("[%s] Battery Packet sent by %s", uptimeString, ipString);
