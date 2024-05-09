@@ -27,7 +27,7 @@ void printEventPacket(otMessage *aMessage, char *ipString)
   getPayload(aMessage, &event);
 
 #if PRINT_UPTIME
-  printUptime(ipString, Event);
+  printStats(ipString, Event);
 #endif
 #if PRINT_PAYLOADS
   char *occured = event.eventOccured ? "Event detected" : "Event not detected";
@@ -42,7 +42,7 @@ void printBatteryPacket(otMessage *aMessage, char *ipString)
   getPayload(aMessage, (void *) &battery);
 
 #if PRINT_UPTIME
-  printUptime(ipString, Battery);
+  printStats(ipString, Battery);
 #endif
 #if PRINT_PAYLOADS
   int batteryLife = (int) battery.batteryLife;

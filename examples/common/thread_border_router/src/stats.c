@@ -12,7 +12,8 @@ static DebugStats statsSed1 = {
   0,                // prevBatteryMs
   true,             // firstBattery
   0,                // eventsReceived
-  0                 // firstEventMs
+  0,                // firstEventMs
+  true              // firstEvent
 };
 
 DebugStats *findSed(const char *ipString) {
@@ -24,10 +25,10 @@ DebugStats *findSed(const char *ipString) {
   return NULL;
 }
 
-void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString)
+void printMsElaspedBattery(DebugStats *sedStats,
+                           uint64_t curBatteryMs,
+                           char* ipString)
 {
-  DebugStats *sedStats = findSed(ipString);
-
   if (sedStats->firstBattery)
   {
     otLogNotePlat("First battery packet sent by %s.", ipString);
@@ -44,24 +45,39 @@ void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString)
   return;
 }
 
-void printUptime(char *ipString, Route route)
+void printMsEvents(DebugStats *sedStats,
+                   uint64_t curEventMs,
+                   char* ipString,
+                   char* uptimeString)
+{
+  sedStats->eventsReceived += 1;
+
+  if (sedStats->firstEvent)
+  {
+    sedStats->firstEventMs = curEventMs;
+    sedStats->firstEvent = false;
+  }
+
+  otLogNotePlat("[%s] %d Event Packet so far sent by %s.",
+                uptimeString, sedStats->eventsReceived, sedStats->address);
+  return;
+}
+
+void printStats(char *ipString, Route route)
 {
   DebugStats *sedStats = findSed(ipString);
+  if (sedStats == NULL) { return; }
 
   char uptimeString[OT_UPTIME_STRING_SIZE];
   EmptyMemory(&uptimeString, sizeof(uptimeString));
-  otInstanceGetUptimeAsString(OT_INSTANCE,
-                             (char *) uptimeString,
-                              sizeof(uptimeString));
+  otInstanceGetUptimeAsString(OT_INSTANCE, (char *) uptimeString, sizeof(uptimeString));
 
+  uint64_t uptime = otInstanceGetUptime(OT_INSTANCE);
   if (route == Battery) {
-    otLogNotePlat("[%s] Battery Packet sent by %s.", uptimeString,
-                  sedStats->address);
-    printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE), ipString);
+    printMsElaspedBattery(sedStats, uptime, ipString);
   }
   else {
-    otLogNotePlat("[%s] Event Packet sent by %s.", uptimeString,
-                  sedStats->address);
+    printMsEvents(sedStats, uptime, ipString, uptimeString);
   }
   return;
 }

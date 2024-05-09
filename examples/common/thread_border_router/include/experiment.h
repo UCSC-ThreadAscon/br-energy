@@ -48,8 +48,8 @@ typedef struct DebugStats {
   */
  int eventsReceived;
  uint64_t firstEventMs;
+ bool firstEvent;
 
 } DebugStats;
 
-void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString);
-void printUptime(char *ipString, Route route);
+void printStats(char *ipString, Route route);
