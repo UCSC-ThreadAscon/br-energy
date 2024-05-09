@@ -32,8 +32,21 @@ BatteryPayload;
 */
 #define PAYLOAD_SIZE 17
 
-typedef struct DebugStats
-{
+typedef struct DebugStats {
   const char *address;
 
-} Debug Stats;
+  /**
+   * Helps determine whether the battery packets are
+   * sent every ~30 seconds.
+  */
+  uint64_t prevBatteryMs;
+  bool firstBattery;
+
+  /**
+   * Helps determine whether all event packets are sent
+   * in the required time period.
+  */
+ int eventsReceived;
+ uint64_t firstEventMs;
+
+} DebugStats;
