@@ -47,9 +47,8 @@ typedef struct DebugStats {
    * in the required time period.
   */
  int eventsReceived;
+ uint64_t firstEventMs;
  bool firstEvent;
-
-  uint64_t powerOnTime;
 
 } DebugStats;
 

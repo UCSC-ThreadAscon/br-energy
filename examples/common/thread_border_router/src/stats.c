@@ -13,8 +13,8 @@ static DebugStats statsSed1 = {
   0,                // prevBatteryMs
   true,             // firstBattery
   0,                // eventsReceived
+  0,                // firstEventMs
   true              // firstEvent
-  0,                // powerOnTime
 };
 
 DebugStats *findSed(const char *ipString) {
@@ -34,9 +34,6 @@ void printMsElaspedBattery(DebugStats *sedStats,
   {
     otLogNotePlat("First battery packet sent by %s.", ipString);
     sedStats->firstBattery = false;
-
-    // The first packet every SED sends is a battery packet on power on.
-    sedStats->powerOnTime = curBatteryMs;
   }
   else
   {
@@ -57,11 +54,12 @@ void printMsEvents(DebugStats *sedStats,
 
   if (sedStats->firstEvent)
   {
+    sedStats->firstEventMs = curEventMs;
     sedStats->firstEvent = false;
     otLogNotePlat("First event packet sent by %s.", sedStats->address);
   }
 
-  uint64_t msElapsed = curEventMs - sedStats->powerOnTime;
+  uint64_t msElapsed = curEventMs - sedStats->firstEvent;
   double minsElapsed = MS_TO_MINUTES((double) msElapsed);
 
   otLogNotePlat("[~%.3f minutes] %d Event Packet(s) so far sent by %s.",
