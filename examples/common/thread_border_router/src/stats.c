@@ -38,7 +38,7 @@ void printMsElaspedBattery(DebugStats *sedStats,
   else
   {
     uint64_t msElapsed = curBatteryMs - sedStats->prevBatteryMs;
-    otLogNotePlat("%d ms since last battery packet by %s.",
+    otLogNotePlat("[%d ms] last battery packet by %s.",
                   (int) msElapsed, ipString);
   }
 
@@ -62,7 +62,7 @@ void printMsEvents(DebugStats *sedStats,
   uint64_t msElapsed = curEventMs - sedStats->firstEvent;
   double minsElapsed = MS_TO_MINUTES((double) msElapsed);
 
-  otLogNotePlat("[~%.3f minutes] %d Event Packet so far sent by %s.",
+  otLogNotePlat("[~%.3f minutes] %d Event Packet(s) so far sent by %s.",
                 minsElapsed, sedStats->eventsReceived, sedStats->address);
   return;
 }
