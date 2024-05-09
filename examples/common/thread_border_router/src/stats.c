@@ -1,4 +1,5 @@
 #include "workload.h"
+#include "time_api.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -47,8 +48,7 @@ void printMsElaspedBattery(DebugStats *sedStats,
 
 void printMsEvents(DebugStats *sedStats,
                    uint64_t curEventMs,
-                   char* ipString,
-                   char* uptimeString)
+                   char* ipString)
 {
   sedStats->eventsReceived += 1;
 
@@ -56,10 +56,14 @@ void printMsEvents(DebugStats *sedStats,
   {
     sedStats->firstEventMs = curEventMs;
     sedStats->firstEvent = false;
+    otLogNotePlat("First event packet sent by %s.", sedStats->address);
   }
 
-  otLogNotePlat("[%s] %d Event Packet so far sent by %s.",
-                uptimeString, sedStats->eventsReceived, sedStats->address);
+  uint64_t msElapsed = curEventMs - sedStats->firstEvent;
+  double minsElapsed = MS_TO_MINUTES((double) msElapsed);
+
+  otLogNotePlat("[~%.3f minutes] %d Event Packet so far sent by %s.",
+                minsElapsed, sedStats->eventsReceived, sedStats->address);
   return;
 }
 
@@ -77,7 +81,7 @@ void printStats(char *ipString, Route route)
     printMsElaspedBattery(sedStats, uptime, ipString);
   }
   else {
-    printMsEvents(sedStats, uptime, ipString, uptimeString);
+    printMsEvents(sedStats, uptime, uptimeString);
   }
   return;
 }
