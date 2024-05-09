@@ -46,6 +46,8 @@ void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString)
 
 void printUptime(char *ipString, Route route)
 {
+  DebugStats *sedStats = findSed(ipString);
+
   char uptimeString[OT_UPTIME_STRING_SIZE];
   EmptyMemory(&uptimeString, sizeof(uptimeString));
   otInstanceGetUptimeAsString(OT_INSTANCE,
@@ -53,11 +55,13 @@ void printUptime(char *ipString, Route route)
                               sizeof(uptimeString));
 
   if (route == Battery) {
-    otLogNotePlat("[%s] Battery Packet sent by %s.", uptimeString, ipString);
+    otLogNotePlat("[%s] Battery Packet sent by %s.", uptimeString,
+                  sedStats->address);
     printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE), ipString);
   }
   else {
-    otLogNotePlat("[%s] Event Packet sent by %s.", uptimeString, ipString);
+    otLogNotePlat("[%s] Event Packet sent by %s.", uptimeString,
+                  sedStats->address);
   }
   return;
 }
