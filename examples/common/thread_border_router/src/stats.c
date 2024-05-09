@@ -5,21 +5,42 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-static uint64_t prevBatteryMs = 0;
-static bool firstBattery = true;
+#define ADDRESS_SED_1 "fd84:7733:23a0:f199:e202:6480:d921:b15"
 
-void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString) {
-  if (firstBattery) {
-    otLogNotePlat("First battery packet sent by %s.", ipString);
-    firstBattery = false;
+static DebugStats statsSed1 = {
+  ADDRESS_SED_1,    // address
+  0,                // prevBatteryMs
+  true,             // firstBattery
+  0,                // eventsReceived
+  0                 // firstEventMs
+};
+
+DebugStats *findSed(const char *ipString) {
+  if (strcmp(ipString, ADDRESS_SED_1) == 0) {
+    return &statsSed1;
   }
-  else {
-    uint64_t msElapsed = curBatteryMs - prevBatteryMs;
+
+  otLogCritPlat("Failed to find device with IP address %s", ipString);
+  return NULL;
+}
+
+void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString)
+{
+  DebugStats *sedStats = findSed(ipString);
+
+  if (sedStats->firstBattery)
+  {
+    otLogNotePlat("First battery packet sent by %s.", ipString);
+    sedStats->firstBattery = false;
+  }
+  else
+  {
+    uint64_t msElapsed = curBatteryMs - sedStats->prevBatteryMs;
     otLogNotePlat("%d ms since last battery packet by %s.",
                   (int) msElapsed, ipString);
   }
 
-  prevBatteryMs = curBatteryMs;
+  sedStats->prevBatteryMs = curBatteryMs;
   return;
 }
 
