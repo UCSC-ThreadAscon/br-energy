@@ -31,3 +31,9 @@ BatteryPayload;
  * an even has occured.
 */
 #define PAYLOAD_SIZE 17
+
+typedef struct DebugStats
+{
+  const char *address;
+
+} Debug Stats;
