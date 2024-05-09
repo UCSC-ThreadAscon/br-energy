@@ -20,50 +20,6 @@ void getPeerAddrString(const otMessageInfo *aMessageInfo, char *ipString) {
   return;
 }
 
-static uint64_t prevBatteryMs = 0;
-static bool firstBattery = true;
-
-void printMsElaspedBattery(uint64_t curBatteryMs, char* ipString) {
-  if (firstBattery) {
-    otLogNotePlat("First battery packet sent by %s.", ipString);
-    firstBattery = false;
-  }
-  else {
-    uint64_t msElapsed = curBatteryMs - prevBatteryMs;
-    otLogNotePlat("%d ms since last battery packet by %s.",
-                  (int) msElapsed, ipString);
-  }
-
-  prevBatteryMs = curBatteryMs;
-  return;
-}
-
-/**
- * According the OpenThread Source Code:
- * https://github.com/UCSC-ThreadAscon/openthread/blob/main/include/openthread/instance.h#L188
- *
- * The format of an uptime string is as follows:
- *
- * "<hh>:<mm>:<ss>.<mmmm>"          if less than a day
- *
- * "<dd>d.<hh>:<mm>:<ss>.<mmmm>"    if longer than a day
-*/
-void printUptime(char *ipString, Route route) {
-  char uptimeString[OT_UPTIME_STRING_SIZE];
-  EmptyMemory(&uptimeString, sizeof(uptimeString));
-  otInstanceGetUptimeAsString(OT_INSTANCE, (char *) uptimeString,
-                              sizeof(uptimeString));
-
-  if (route == Battery) {
-    otLogNotePlat("[%s] Battery Packet sent by %s.", uptimeString, ipString);
-    printMsElaspedBattery(otInstanceGetUptime(OT_INSTANCE), ipString);
-  }
-  else {
-    otLogNotePlat("[%s] Event Packet sent by %s.", uptimeString, ipString);
-  }
-  return;
-}
-
 void printEventPacket(otMessage *aMessage, char *ipString)
 {
   EventPayload event;
