@@ -7,6 +7,7 @@
 #include <inttypes.h>
 
 #define ADDRESS_SED_1 "fd84:7733:23a0:f199:e202:6480:d921:b15"
+#define ADDRESS_SED_2 "fd84:7733:23a0:f199:9dbf:b2a5:7bc7:a0ae"
 
 static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
@@ -17,9 +18,21 @@ static DebugStats statsSed1 = {
   0                 // powerOnTime
 };
 
+static DebugStats statsSed2 = {
+  ADDRESS_SED_2,    // address
+  0,                // prevBatteryMs
+  true,             // firstBattery
+  0,                // eventsReceived
+  true,             // firstEvent
+  0                 // powerOnTime
+};
+
 DebugStats *findSed(const char *ipString) {
   if (strcmp(ipString, ADDRESS_SED_1) == 0) {
     return &statsSed1;
+  }
+  else if (strcmp(ipString, ADDRESS_SED_2) == 0) {
+    return &statsSed2;
   }
 
   otLogCritPlat("Failed to find device with IP address %s", ipString);
