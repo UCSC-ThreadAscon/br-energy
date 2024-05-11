@@ -41,6 +41,7 @@ typedef struct DebugStats {
   */
   uint64_t prevBatteryMs;
   bool firstBattery;
+  uint64_t numBatteyPackets;
 
   /**
    * Helps determine whether all event packets are sent

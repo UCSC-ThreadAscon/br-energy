@@ -13,6 +13,7 @@ static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
   0,                // prevBatteryMs
   true,             // firstBattery
+  0,                // numBatteryPackets
   0,                // eventsReceived
   true,             // firstEvent
   0                 // powerOnTime
@@ -22,6 +23,7 @@ static DebugStats statsSed2 = {
   ADDRESS_SED_2,    // address
   0,                // prevBatteryMs
   true,             // firstBattery
+  0,                // numBatteryPackets
   0,                // eventsReceived
   true,             // firstEvent
   0                 // powerOnTime
@@ -43,6 +45,8 @@ void printMsElaspedBattery(DebugStats *sedStats,
                            uint64_t uptime,
                            char* ipString)
 {
+  sedStats->numBatteyPackets += 1;
+
   if (sedStats->firstBattery)
   {
     otLogNotePlat("First battery packet sent by %s.", ipString);
@@ -60,6 +64,8 @@ void printMsElaspedBattery(DebugStats *sedStats,
   }
 
   sedStats->prevBatteryMs = uptime;
+  otLogNotePlat("%d battery packets sent so far.",
+                (int) sedStats->numBatteyPackets);
   return;
 }
 
