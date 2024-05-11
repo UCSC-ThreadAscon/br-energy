@@ -64,8 +64,8 @@ void printMsElaspedBattery(DebugStats *sedStats,
   }
 
   sedStats->prevBatteryMs = uptime;
-  otLogNotePlat("%d battery packets sent so far.",
-                (int) sedStats->numBatteyPackets);
+  otLogNotePlat("%d Battery Packet(s) sent so far by %s.",
+                (int) sedStats->numBatteyPackets, ipString);
   return;
 }
 
