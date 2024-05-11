@@ -38,7 +38,7 @@ static DebugStats statsSed3 = {
   0,                // eventsReceived
   true,             // firstEvent
   0                 // powerOnTime
-}
+};
 
 DebugStats *findSed(const char *ipString) {
   if (strcmp(ipString, ADDRESS_SED_1) == 0) {
