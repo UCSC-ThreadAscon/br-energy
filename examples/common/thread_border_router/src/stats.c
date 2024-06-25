@@ -51,17 +51,17 @@ static DebugStats statsSed4 = {
   0                 // powerOnTime
 };
 
-DebugStats *findSed(const char *ipString) {
-  if (strcmp(ipString, ADDRESS_SED_1) == 0) {
-    return &statsSed1;
-  }
-  else if (strcmp(ipString, ADDRESS_SED_2) == 0) {
-    return &statsSed2;
-  }
-  else if (strcmp(ipString, ADDRESS_SED_3) == 0) {
-    return &statsSed3;
-  }
+#define AddSed(address, sedStructPtr)                \
+  if (strcmp(ipString, ADDRESS_SED_1) == 0) {        \
+    return sedStructPtr;                             \
+  }                                                  \
 
+DebugStats *findSed(const char *ipString)
+{
+  AddSed(ADDRESS_SED_1, &statsSed1);
+  AddSed(ADDRESS_SED_2, &statsSed2);
+  AddSed(ADDRESS_SED_3, &statsSed3);
+  AddSed(ADDRESS_SED_4, &statsSed4);
   otLogCritPlat("Failed to find device with IP address %s", ipString);
   return NULL;
 }
