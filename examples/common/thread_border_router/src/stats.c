@@ -8,7 +8,7 @@
 
 #define ADDRESS_SED_1 "fd84:7733:23a0:f199:1ec9:6483:e4e4:b1ef"
 #define ADDRESS_SED_2 "fd84:7733:23a0:f199:3b0b:73e9:da75:7ce4"
-#define ADDRESS_SED_3 "fd84:7733:23a0:f199:f95b:c813:33e5:594d"
+#define ADDRESS_SED_3 "fd84:7733:23a0:f199:87c3:4196:6d07:3a5f"
 
 static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
