@@ -6,9 +6,9 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#define ADDRESS_SED_1 "fd84:7733:23a0:f199:e202:6480:d921:b15"
-#define ADDRESS_SED_2 "fd84:7733:23a0:f199:9dbf:b2a5:7bc7:a0ae"
-#define ADDRESS_SED_3 "fd84:7733:23a0:f199:f4f8:4997:f0fb:55ba"
+#define ADDRESS_SED_1 "fd84:7733:23a0:f199:1ec9:6483:e4e4:b1ef"
+#define ADDRESS_SED_2 "fd84:7733:23a0:f199:3b0b:73e9:da75:7ce4"
+#define ADDRESS_SED_3 "fd84:7733:23a0:f199:f95b:c813:33e5:594d"
 
 static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
