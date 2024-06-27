@@ -9,7 +9,6 @@
 #define ADDRESS_SED_1 "fd84:7733:23a0:f199:e202:6480:d921:b15"
 #define ADDRESS_SED_2 "fd84:7733:23a0:f199:9dbf:b2a5:7bc7:a0ae"
 #define ADDRESS_SED_3 "fd84:7733:23a0:f199:f4f8:4997:f0fb:55ba"
-#define ADDRESS_SED_4 "fd84:7733:23a0:f199:1ec9:6483:e4e4:b1ef"
 
 static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
@@ -41,16 +40,6 @@ static DebugStats statsSed3 = {
   0                 // powerOnTime
 };
 
-static DebugStats statsSed4 = {
-  ADDRESS_SED_4,    // address
-  0,                // prevBatteryMs
-  true,             // firstBattery
-  0,                // numBatteryPackets
-  0,                // eventsReceived
-  true,             // firstEvent
-  0                 // powerOnTime
-};
-
 #define IsSed(address, sedStructPtr)               \
   if (strcmp(ipString, address) == 0) {            \
     return sedStructPtr;                           \
@@ -61,7 +50,6 @@ DebugStats *findSed(const char *ipString)
   IsSed(ADDRESS_SED_1, &statsSed1);
   IsSed(ADDRESS_SED_2, &statsSed2);
   IsSed(ADDRESS_SED_3, &statsSed3);
-  IsSed(ADDRESS_SED_4, &statsSed4);
   otLogCritPlat("Failed to find device with IP address %s", ipString);
   return NULL;
 }
