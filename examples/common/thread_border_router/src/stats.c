@@ -54,6 +54,9 @@ DebugStats *findSed(const char *ipString)
   return NULL;
 }
 
+#define BATTERY_MARGIN_SECONDS 40
+#define BATTERY_MARGIN_MS SECONDS_TO_MS(BATTERY_MARGIN_SECONDS)
+
 void printMsElaspedBattery(DebugStats *sedStats,
                            uint64_t uptime,
                            char* ipString)
@@ -72,8 +75,15 @@ void printMsElaspedBattery(DebugStats *sedStats,
   else
   {
     uint64_t msElapsed = uptime - sedStats->prevBatteryMs;
-    otLogNotePlat("[%d ms] last battery packet by %s.",
-                  (int) msElapsed, ipString);
+    if (msElasped <= BATTERY_MARGIN_MS)
+    {
+      otLogNotePlat("[%d ms] last battery packet by %s.", (int) msElapsed, ipString);
+    }
+    else
+    {
+      otLogWarnPlat("[%d ms] Large gap between last battery packet sent by %s.",
+                    (int) msElasped, ipString);
+    }
   }
 
   sedStats->prevBatteryMs = uptime;
