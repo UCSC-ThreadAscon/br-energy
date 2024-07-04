@@ -82,7 +82,7 @@ void printMsElaspedBattery(DebugStats *sedStats,
     else
     {
       otLogWarnPlat("[%d ms] Large gap between last battery packet sent by %s.",
-                    (int) msElasped, ipString);
+                    (int) msElapsed, ipString);
     }
   }
 
