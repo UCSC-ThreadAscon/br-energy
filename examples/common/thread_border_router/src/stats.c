@@ -75,7 +75,7 @@ void printMsElaspedBattery(DebugStats *sedStats,
   else
   {
     uint64_t msElapsed = uptime - sedStats->prevBatteryMs;
-    if (msElasped <= BATTERY_MARGIN_MS)
+    if (msElapsed <= BATTERY_MARGIN_MS)
     {
       otLogNotePlat("[%d ms] last battery packet by %s.", (int) msElapsed, ipString);
     }
