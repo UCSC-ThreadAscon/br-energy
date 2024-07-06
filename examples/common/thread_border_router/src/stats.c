@@ -54,7 +54,7 @@ DebugStats *findSed(const char *ipString)
   return NULL;
 }
 
-#define BATTERY_MARGIN_SECONDS 40
+#define BATTERY_MARGIN_SECONDS 32
 #define BATTERY_MARGIN_MS SECONDS_TO_MS(BATTERY_MARGIN_SECONDS)
 
 void printMsElaspedBattery(DebugStats *sedStats,
