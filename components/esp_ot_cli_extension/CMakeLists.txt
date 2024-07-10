@@ -36,3 +36,6 @@ if (CONFIG_OPENTHREAD_CLI_OTA)
     idf_component_optional_requires(PUBLIC esp_br_http_ota)
 endif()
 
+if (CONFIG_OPENTHREAD_RCP_COMMAND)
+    idf_component_optional_requires(PRIVATE esp_rcp_update)
+endif()
