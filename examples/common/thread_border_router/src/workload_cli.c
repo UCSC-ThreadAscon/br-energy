@@ -1,4 +1,5 @@
 #include "workload.h"
+#include "experiment.h"
 
 static otCoapResource *battery;
 static otCoapResource *event;
@@ -27,6 +28,8 @@ otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[])
 
   otCoapAddResource(OT_INSTANCE, battery);
   otCoapAddResource(OT_INSTANCE, event);
+
+  printIndependentVars();
 
   otLogNotePlat("Set up battery URI: '%s'.", battery->mUriPath);
   otLogNotePlat("Set up event URI: '%s'.", event->mUriPath);

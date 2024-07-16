@@ -11,5 +11,6 @@
 #include "openthread/logging.h"
 
 void setTxPower(void);
+otError getTxPower(int8_t *aPowerAddr);
 
 #endif // OT_COMMON_

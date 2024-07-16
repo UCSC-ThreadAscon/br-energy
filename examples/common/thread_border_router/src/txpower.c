@@ -24,7 +24,8 @@ otError getTxPower(int8_t *aPowerAddr)
       break;
 
     case OT_ERROR_NONE:
-      otLogNotePlat("TX Power is currently: %" PRId8 ".", *aPowerAddr);
+      int txPower = (int) *aPowerAddr;
+      otLogNotePlat("TX Power is currently: %d dBm", txPower);
       break;
 
     default:
