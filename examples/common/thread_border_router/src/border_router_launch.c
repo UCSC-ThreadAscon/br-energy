@@ -104,41 +104,24 @@ static void rcp_failure_handler(void)
 {
 #if CONFIG_AUTO_UPDATE_RCP
     esp_rcp_mark_image_unusable();
-    try_update_ot_rcp(&s_openthread_platform_config);
-#endif // CONFIG_AUTO_UPDATE_RCP
-    esp_rcp_reset();
+    char internal_rcp_version[RCP_VERSION_MAX_SIZE];
+    if (esp_rcp_load_version_in_storage(internal_rcp_version, sizeof(internal_rcp_version)) == ESP_OK) {
+        ESP_LOGI(TAG, "Internal RCP Version: %s", internal_rcp_version);
+        update_rcp();
+    } else {
+        ESP_LOGI(TAG, "RCP firmware not found in storage, will reboot to try next image");
+        esp_rcp_mark_image_verified(false);
+        esp_restart();
+    }
+#endif
 }
 
-static void ot_task_worker(void *ctx)
+static void ot_br_init(void *ctx)
 {
-    esp_netif_config_t cfg = ESP_NETIF_DEFAULT_OPENTHREAD();
-    esp_netif_t *openthread_netif = esp_netif_new(&cfg);
-
-    assert(openthread_netif != NULL);
-
-    // Initialize the OpenThread stack
-    esp_openthread_register_rcp_failure_handler(rcp_failure_handler);
-    ESP_ERROR_CHECK(esp_openthread_init(&s_openthread_platform_config));
-
-    // Initialize border routing features
-    esp_openthread_lock_acquire(portMAX_DELAY);
-#if CONFIG_AUTO_UPDATE_RCP
-    try_update_ot_rcp(&s_openthread_platform_config);
-#endif
-    ESP_ERROR_CHECK(esp_netif_attach(openthread_netif, esp_openthread_netif_glue_init(&s_openthread_platform_config)));
-
-#if CONFIG_OPENTHREAD_LOG_LEVEL_DYNAMIC
-    (void)otLoggingSetLevel(CONFIG_LOG_DEFAULT_LEVEL);
-#endif
-
-    esp_openthread_cli_init();
-    ESP_ERROR_CHECK(esp_netif_set_default_netif(openthread_netif));
-    esp_cli_custom_command_init();
 #if CONFIG_OPENTHREAD_BR_AUTO_START
 #if !CONFIG_EXAMPLE_CONNECT_WIFI && !CONFIG_EXAMPLE_CONNECT_ETHERNET
 #error No backbone netif!
 #endif
-    esp_openthread_lock_release();
     ESP_ERROR_CHECK(example_connect());
 #if CONFIG_EXAMPLE_CONNECT_WIFI
     ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_MAX_MODEM));
@@ -151,18 +134,46 @@ static void ot_task_worker(void *ctx)
     ESP_ERROR_CHECK(esp_openthread_auto_start((error == OT_ERROR_NONE) ? &dataset : NULL));
 #endif // CONFIG_OPENTHREAD_BR_AUTO_START
     esp_openthread_lock_release();
+    vTaskDelete(NULL);
+}
+
+static void ot_task_worker(void *ctx)
+{
+    esp_netif_config_t cfg = ESP_NETIF_DEFAULT_OPENTHREAD();
+    esp_netif_t *openthread_netif = esp_netif_new(&cfg);
+
+    assert(openthread_netif != NULL);
+
+    // Initialize the OpenThread stack
+    esp_openthread_register_rcp_failure_handler(rcp_failure_handler);
+    ESP_ERROR_CHECK(esp_openthread_init(&s_openthread_platform_config));
+#if CONFIG_AUTO_UPDATE_RCP
+    try_update_ot_rcp(&s_openthread_platform_config);
+#endif
+    // Initialize border routing features
+    esp_openthread_lock_acquire(portMAX_DELAY);
+    ESP_ERROR_CHECK(esp_netif_attach(openthread_netif, esp_openthread_netif_glue_init(&s_openthread_platform_config)));
+    ESP_ERROR_CHECK(esp_netif_set_default_netif(openthread_netif));
+#if CONFIG_OPENTHREAD_LOG_LEVEL_DYNAMIC
+    (void)otLoggingSetLevel(CONFIG_LOG_DEFAULT_LEVEL);
+#endif
+    esp_openthread_cli_init();
+    esp_cli_custom_command_init();
+    esp_openthread_cli_create_task();
+    esp_openthread_lock_release();
+
+    xTaskCreate(ot_br_init, "ot_br_init", 6144, NULL, 4, NULL);
 
     // TX power must be set before starting the OpenThread CLI.
     setTxPower();
 
     // Run the main loop
-    esp_openthread_cli_create_task();
     esp_openthread_launch_mainloop();
 
     // Clean up
+    esp_openthread_netif_glue_deinit();
     esp_netif_destroy(openthread_netif);
     esp_vfs_eventfd_unregister();
-    esp_openthread_netif_glue_deinit();
     esp_rcp_update_deinit();
     vTaskDelete(NULL);
 }
@@ -172,5 +183,6 @@ void launch_openthread_border_router(const esp_openthread_platform_config_t *pla
 {
     s_openthread_platform_config = *platform_config;
     ESP_ERROR_CHECK(esp_rcp_update_init(update_config));
+
     xTaskCreate(ot_task_worker, "ot_br_main", 6144, xTaskGetCurrentTaskHandle(), 5, NULL);
 }
