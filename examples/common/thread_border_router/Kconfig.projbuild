@@ -3,7 +3,7 @@ menu "ESP Thread Border Router Example"
     menu "UCSC Thread-Ascon Border Router"
       config TX_POWER
         int 'Set the 802.15.4 TX power used by OpenThread'
-        range -128 127
+        range -24 20
         default 20
         help
             Set the 802.15.4 transmission power (in dBm) for OpenThread.
