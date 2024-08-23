@@ -33,10 +33,12 @@ otError expServerStart()
   otCoapAddResource(OT_INSTANCE, &battery);
   otCoapAddResource(OT_INSTANCE, &event);
 
-  printIndependentVars();
-
+  PrintDelimiter();
+  printCipherSuite();
+  printTxPower();
   otLogNotePlat("Set up battery URI: '%s'.", battery.mUriPath);
   otLogNotePlat("Set up event URI: '%s'.", event.mUriPath);
+  PrintDelimiter();
 
   return OT_ERROR_NONE;
 }

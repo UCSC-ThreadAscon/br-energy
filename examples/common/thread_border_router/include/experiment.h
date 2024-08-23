@@ -1,10 +1,12 @@
 #pragma once
 
 #include "uuid.h"
-
 #include <sdkconfig.h>
 
-void printIndependentVars(void);
+#define PrintDelimiter() otLogNotePlat("---------------------------");
+
+void printCipherSuite();
+void printTxPower();
 
 #define CIPHER_SUITE CONFIG_THREAD_ASCON_CIPHER_SUITE
 #define AES 0

@@ -1,7 +1,7 @@
 #include "utilities.h"
 #include "experiment.h"
 
-void printIndependentVars(void)
+void printCipherSuite()
 {
 #if (CIPHER_SUITE == AES)
   otLogNotePlat("Cipher Suite: AES");
@@ -12,9 +12,13 @@ void printIndependentVars(void)
 #elif (CIPHER_SUITE == LIBASCON_128)
   otLogNotePlat("Cipher Suite: ASCON-128");
 #endif
+  return;
+}
 
-  int8_t currentPower = 0;
-  if (getTxPower(&currentPower) != OT_ERROR_NONE)
+void printTxPower()
+{
+  int8_t txPower = 0;
+  if (getTxPower(&txPower) != OT_ERROR_NONE)
   {
     otLogCritPlat("Failed to get TX Power.");
   }
