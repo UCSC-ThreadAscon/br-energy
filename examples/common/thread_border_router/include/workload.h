@@ -71,13 +71,10 @@ void handleError(otError error, char* desc);
 
 #define COAP_SOCK_PORT OT_DEFAULT_COAP_PORT
 
-/** ---- CoAP CLI API ---- */
-otError expServerStart(void* aContext, uint8_t argsLength, char* aArgs[]) ;
-otError expServerFree(void* aContext, uint8_t argsLength, char* aArgs[]);
-
 /** ---- CoAP Common API ---- */
 uint16_t getPayloadLength(const otMessage *aMessage);
 void getPayload(const otMessage *aMessage, void* buffer);
 
 /* ---- CoAP Server API ---- */
+void expServerStartCallback(otChangedFlags changed_flags, void* ctx);
 otError createResource(otCoapResource *resource, Route route);
