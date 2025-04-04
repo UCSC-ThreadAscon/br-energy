@@ -64,6 +64,8 @@ void expServerStartCallback(otChangedFlags changed_flags, void* ctx)
   otDeviceRole role = otThreadGetDeviceRole(instance);
   if ((connected(role) == true) && (connected(s_previous_role) == false))
   {
+    setTxPower();
+
     /** Start the CoAP server for the Energy Consumption experiments.
      */
     expServerStart();
