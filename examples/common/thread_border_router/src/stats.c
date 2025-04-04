@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#define ADDRESS_SED_1 "fd07:dd09:5dd8:2c0c:6490:4dc4:8e42:bf0d"
+#define ADDRESS_SED_1 "fd07:dd09:5dd8:2c0c:8698:b802:51f1:3f91"
 #define ADDRESS_SED_2 "fd84:7733:23a0:f199:cd17:19f6:4135:f55b"
 #define ADDRESS_SED_3 "fd84:7733:23a0:f199:c257:afca:b5f2:1452"
 
@@ -50,7 +50,7 @@ DebugStats *findSed(const char *ipString)
   IsSed(ADDRESS_SED_1, &statsSed1);
   IsSed(ADDRESS_SED_2, &statsSed2);
   IsSed(ADDRESS_SED_3, &statsSed3);
-  otLogCritPlat("Failed to find device with IP address %s", ipString);
+  otLogCritPlat("Failed to find device with IP address %s.", ipString);
   return NULL;
 }
 
