@@ -5,15 +5,6 @@
 
 #define PrintDelimiter() otLogNotePlat("---------------------------");
 
-void printCipherSuite();
-void printTxPower();
-
-#define CIPHER_SUITE CONFIG_THREAD_ASCON_CIPHER_SUITE
-#define AES 0
-#define NONE 1
-#define LIBASCON_128A 4
-#define LIBASCON_128 5
-
 #define BATTERY_URI "battery"
 #define EVENT_URI "event"
 

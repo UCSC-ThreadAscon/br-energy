@@ -1,5 +1,4 @@
-#include "utilities.h"
-#include "experiment.h"
+#include "independent_variables.h"
 
 void printCipherSuite()
 {
@@ -22,5 +21,15 @@ void printTxPower()
   {
     otLogCritPlat("Failed to get TX Power.");
   }
+  return;
+}
+
+void printNetworkKey()
+{
+  otNetworkKey key;
+  EmptyMemory(&key, sizeof(otNetworkKey));
+
+  otThreadGetNetworkKey(esp_openthread_get_instance(), &key);
+  otDumpNotePlat("Thread Network Key:", key.m8, OT_NETWORK_KEY_SIZE);
   return;
 }

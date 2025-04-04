@@ -1,5 +1,6 @@
 #include "workload.h"
 #include "experiment.h"
+#include "independent_variables.h"
 
 static otCoapResource battery;
 static otCoapResource event;
@@ -33,6 +34,7 @@ otError expServerStart()
   otCoapAddResource(OT_INSTANCE, &battery);
   otCoapAddResource(OT_INSTANCE, &event);
 
+  printNetworkKey();
   PrintDelimiter();
   printCipherSuite();
   printTxPower();
