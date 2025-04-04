@@ -31,7 +31,7 @@
  *
  * Furthermore, an IPv6 string representation is made up of 16 bytes.
  *
- * Thus, the total string size is  9 + 12 + 1 + 10 + 40 = 72 bytes.
+ * Thus, the total string size is 9 + 12 + 1 + 10 + 40 = 72 bytes.
 */
 #define PRINT_STATEMENT_SIZE 72
 
