@@ -7,8 +7,8 @@
 #include <inttypes.h>
 
 #define ADDRESS_SED_1 "fdd8:91f7:3002:2147:9e4d:da6b:6b9c:8dd1"
-#define ADDRESS_SED_2 "fd07:dd09:5dd8:2c0c:1ffc:5e2a:b7fd:7243"
-#define ADDRESS_SED_3 "fd07:dd09:5dd8:2c0c:87c3:4196:6d07:3a5f"
+#define ADDRESS_SED_2 "fdd8:91f7:3002:2147:cd17:19f6:4135:f55b"
+#define ADDRESS_SED_3 "fdd8:91f7:3002:2147:c257:afca:b5f2:1452"
 
 static DebugStats statsSed1 = {
   ADDRESS_SED_1,    // address
