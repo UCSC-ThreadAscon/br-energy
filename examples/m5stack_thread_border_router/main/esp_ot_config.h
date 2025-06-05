@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2021 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2025 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: CC0-1.0
  *
@@ -72,21 +72,12 @@
 #endif // CONFIG_OPENTHREAD_RADIO_SPINEL_UART OR  CONFIG_OPENTHREAD_RADIO_SPINEL_SPI
 
 #if CONFIG_AUTO_UPDATE_RCP
-
-#if defined(CONFIG_ESP_BR_H2_TARGET)
-#define ESP_BR_RCP_TARGET_ID ESP32H2_CHIP
-#elif defined(CONFIG_ESP_BR_C6_TARGET)
-#define ESP_BR_RCP_TARGET_ID ESP32C6_CHIP
-#else
-#error RCP target type not supported.
-#endif
-
 #define ESP_OPENTHREAD_RCP_UPDATE_CONFIG()                                                                   \
     {                                                                                                        \
         .rcp_type = RCP_TYPE_UART, .uart_rx_pin = CONFIG_PIN_TO_RCP_TX, .uart_tx_pin = CONFIG_PIN_TO_RCP_RX, \
         .uart_port = 1, .uart_baudrate = 115200, .reset_pin = CONFIG_PIN_TO_RCP_RESET,                       \
         .boot_pin = CONFIG_PIN_TO_RCP_BOOT, .update_baudrate = 460800,                                       \
-        .firmware_dir = "/" CONFIG_RCP_PARTITION_NAME "/ot_rcp", .target_chip = ESP_BR_RCP_TARGET_ID         \
+        .firmware_dir = "/" CONFIG_RCP_PARTITION_NAME "/ot_rcp", .target_chip = ESP32H2_CHIP,                \
     }
 #else
 #define ESP_OPENTHREAD_RCP_UPDATE_CONFIG() \
@@ -96,25 +87,7 @@
 #endif
 
 #if CONFIG_OPENTHREAD_CONSOLE_TYPE_UART
-#define ESP_OPENTHREAD_DEFAULT_HOST_CONFIG()                   \
-    {                                                          \
-        .host_connection_mode = HOST_CONNECTION_MODE_CLI_UART, \
-        .host_uart_config = {                                  \
-            .port = 0,                                         \
-            .uart_config =                                     \
-                {                                              \
-                    .baud_rate = 115200,                       \
-                    .data_bits = UART_DATA_8_BITS,             \
-                    .parity = UART_PARITY_DISABLE,             \
-                    .stop_bits = UART_STOP_BITS_1,             \
-                    .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,     \
-                    .rx_flow_ctrl_thresh = 0,                  \
-                    .source_clk = UART_SCLK_DEFAULT,           \
-                },                                             \
-            .rx_pin = UART_PIN_NO_CHANGE,                      \
-            .tx_pin = UART_PIN_NO_CHANGE,                      \
-        },                                                     \
-    }
+#error Console UART is not available on M5Stack. Use USB Serial JTAG for console output.
 #elif CONFIG_OPENTHREAD_CONSOLE_TYPE_USB_SERIAL_JTAG
 #define ESP_OPENTHREAD_DEFAULT_HOST_CONFIG()                        \
     {                                                               \
