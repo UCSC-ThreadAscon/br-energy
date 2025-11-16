@@ -115,14 +115,11 @@ static void ot_br_init(void *ctx)
 #if CONFIG_EXAMPLE_CONNECT_WIFI
     char wifi_ssid[32] = "";
     char wifi_password[64] = "";
-    if (esp_ot_wifi_config_get_ssid(wifi_ssid) == ESP_OK) {
-        ESP_LOGI(TAG, "use the Wi-Fi config from NVS");
-        esp_ot_wifi_config_get_password(wifi_password);
-    } else {
-        ESP_LOGI(TAG, "use the Wi-Fi config from Kconfig");
-        strcpy(wifi_ssid, CONFIG_EXAMPLE_WIFI_SSID);
-        strcpy(wifi_password, CONFIG_EXAMPLE_WIFI_PASSWORD);
-    }
+
+    ESP_LOGI(TAG, "use the Wi-Fi config from Kconfig");
+    strcpy(wifi_ssid, CONFIG_EXAMPLE_WIFI_SSID);
+    strcpy(wifi_password, CONFIG_EXAMPLE_WIFI_PASSWORD);
+
     if (esp_ot_wifi_connect(wifi_ssid, wifi_password) == ESP_OK) {
         wifi_or_ethernet_connected = true;
     } else {
