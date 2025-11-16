@@ -11,9 +11,9 @@ void printCipherSuite()
 #elif (CIPHER_SUITE == LIBASCON_128)
   otLogNotePlat("Cipher Suite: ASCON-128 (LibAscon)");
 #elif (CIPHER_SUITE == ASCON_AEAD_128)
-  otLogNotePlat("Cipher Suite: AsconAead128")
+  otLogNotePlat("Cipher Suite: AsconAead128");
 #elif (CIPHER_SUITE == CHA_CHA_POLY)
-  otLogNotePlat("Cipher Suite: ChaChaPoly")
+  otLogNotePlat("Cipher Suite: ChaChaPoly");
 #endif
   return;
 }
