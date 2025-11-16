@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#define ADDRESS_SED_1 "fdd8:91f7:3002:2147:9e4d:da6b:6b9c:8dd1"
+#define ADDRESS_SED_1 "fdd8:91f7:3002:2147:e0ef:3bdb:fcd:c28b"
 #define ADDRESS_SED_2 "fdd8:91f7:3002:2147:cd17:19f6:4135:f55b"
 #define ADDRESS_SED_3 "fdd8:91f7:3002:2147:c257:afca:b5f2:1452"
 
