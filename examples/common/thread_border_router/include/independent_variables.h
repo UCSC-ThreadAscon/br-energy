@@ -28,6 +28,8 @@
 #define NONE 1
 #define LIBASCON_128A 4
 #define LIBASCON_128 5
+#define ASCON_AEAD_128 6
+#define CHA_CHA_POLY 7
 
 void printCipherSuite();
 void printTxPower();
