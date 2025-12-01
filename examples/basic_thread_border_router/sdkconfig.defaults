@@ -4,7 +4,7 @@ CONFIG_IDF_TARGET="esp32s3"
 #
 # Serial flasher config
 #
-CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
 # end of Serial flasher config
 
 #
@@ -103,7 +103,7 @@ CONFIG_EXAMPLE_ETH_SPI_CLOCK_MHZ=36
 CONFIG_EXAMPLE_ETH_SPI_INT_GPIO=39
 CONFIG_EXAMPLE_ETH_PHY_RST_GPIO=40
 CONFIG_EXAMPLE_ETH_PHY_ADDR=1
-# end of Etherenet
+# end of Ethernet
 
 #
 # http server
