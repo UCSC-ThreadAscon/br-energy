@@ -7,15 +7,13 @@
 
 #pragma once
 
+#include "lvgl.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void br_m5stack_bsp_init(void);
-
-void br_m5stack_display_init(void);
-
-void br_m5stack_create_ui(void);
+lv_obj_t *br_m5stack_wifi_ui_init(lv_obj_t *page);
 
 #ifdef __cplusplus
 } /* extern "C" */

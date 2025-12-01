@@ -27,9 +27,9 @@ typedef enum {
 otError esp_ot_process_wifi_cmd(void *aContext, uint8_t aArgsLength, char *aArgs[]);
 
 /**
- * @brief This function sets or clears the border router initialization flag.
+ * @brief This function sets or clears the border router initalization flag.
  *
- * @param[in]   initialized  border router is or not initialized.
+ * @param[in]   initialized  border router is or not initalized.
  */
 void esp_ot_wifi_border_router_init_flag_set(bool initialized);
 
