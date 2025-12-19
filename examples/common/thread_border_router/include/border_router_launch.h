@@ -17,7 +17,7 @@ extern "C" {
 
 #include "utilities.h"
 
-void launch_openthread_border_router(const esp_openthread_platform_config_t *config,
+void launch_openthread_border_router(const esp_openthread_config_t *config,
                                      const esp_rcp_update_config_t *update_config);
 
 #ifdef __cplusplus
